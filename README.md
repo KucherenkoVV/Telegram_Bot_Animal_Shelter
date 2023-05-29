@@ -2,6 +2,8 @@
 
 ## Описание 
 
+[Техническое задание](https://achieved-spaghetti-f0e.notion.site/Terms-of-reference-715c4389749244a78ceefa8c1c31cafd)
+
 (что умеет, для чего нужен)
 
 ## Команда проекта:
