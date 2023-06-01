@@ -15,7 +15,7 @@
  
  [Житарь Владислав](https://github.com/R2D2VLAD)
  
- [Акопян Юлия]()
+ [Акопян Юлия](https://github.com/Yuliya1201)
  
  ---
 
@@ -39,7 +39,7 @@
 * UI API Swagger-ui
 * ...
 
-#### Подключенные библиотки:
+#### Подключенные библиотеки:
 + org.projectlombok
 + org.postgresql
 + com.github.pengrad version 6.3.0
