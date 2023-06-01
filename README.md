@@ -15,7 +15,7 @@
  
  [Житарь Владислав](https://github.com/R2D2VLAD)
  
- [Акопян Юлия]()
+ [Акопян Юлия](https://github.com/Yuliya1201)
  
  ---
 
