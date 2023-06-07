@@ -1,4 +1,4 @@
 package com.telegram_bot_animal_shelter.service;
 
-public class PersonDogServiceImplTest {
+public class CatServiceImplTest {
 }
