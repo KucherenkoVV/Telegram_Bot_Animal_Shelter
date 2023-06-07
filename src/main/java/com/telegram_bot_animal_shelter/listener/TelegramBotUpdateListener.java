@@ -16,8 +16,7 @@ import javax.annotation.PostConstruct;
 import java.util.List;
 
 /**
- * Class TelegramBotUpdateListener
- * @author Zhitar Vlad
+ * @author Zhitar Vladislav
  * @version 1.0.0
  */
 
@@ -63,7 +62,7 @@ public class TelegramBotUpdateListener implements UpdatesListener {
                             switch (text) {
                                 case START -> {
                                     sendMessage(chatId, HI_TEXT);
-                                    keyBoardShelter.sendMenu(chatId);
+                                    keyBoardShelter.chooseAnimals(chatId);
                                 }
                                 case CAT -> sendMessage(chatId, "Вы выбрали кошачий приют");
                                 case DOG -> sendMessage(chatId, "Вы выбрали собачий приют");
@@ -76,7 +75,7 @@ public class TelegramBotUpdateListener implements UpdatesListener {
         return UpdatesListener.CONFIRMED_UPDATES_ALL;
     }
 
-    public void sendMessage(Long chatId, String message) {
+    private void sendMessage(Long chatId, String message) {
         SendMessage sendMessage = new SendMessage(chatId, message);
         SendResponse sendResponse = telegramBot.execute(sendMessage);
         if (!sendResponse.isOk()) {
