@@ -62,7 +62,7 @@ public class TelegramBotUpdateListener implements UpdatesListener {
                             switch (text) {
                                 case START -> {
                                     sendMessage(chatId, HI_TEXT);
-                                    keyBoardShelter.sendMenu(chatId);
+                                    keyBoardShelter.chooseAnimals(chatId);
                                 }
                                 case CAT -> sendMessage(chatId, "Вы выбрали кошачий приют");
                                 case DOG -> sendMessage(chatId, "Вы выбрали собачий приют");
