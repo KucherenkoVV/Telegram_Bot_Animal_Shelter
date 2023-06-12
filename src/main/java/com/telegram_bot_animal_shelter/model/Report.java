@@ -95,10 +95,8 @@ public class Report {
     private Long lastMessageMs;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(referencedColumnName = "id")
     private PersonCat personCat;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(referencedColumnName = "id")
     private PersonDog personDog;
 }

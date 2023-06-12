@@ -25,16 +25,11 @@ public class PersonDog extends Person{
      */
     @Id
     @GeneratedValue
-    @Column(name = "id")
     private Long id;
 
     public PersonDog(String name, int yearOfBirth, String phone, String address, Long chatId, Status status, Dog dog) {
         super(name, yearOfBirth, phone, address, chatId, status);
         this.dog = dog;
-    }
-
-    public PersonDog(String name, int yearOfBirth, String phone, String address, Long chatId, Status status) {
-        super(name, yearOfBirth, phone, address, chatId, status);
     }
 
     /**
@@ -45,6 +40,6 @@ public class PersonDog extends Person{
     @JoinColumn(name = "dog_id", referencedColumnName = "id")
     private Dog dog;
 
-    @OneToMany(mappedBy = "id", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "PersonDog", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     List<Report> reports;
 }
