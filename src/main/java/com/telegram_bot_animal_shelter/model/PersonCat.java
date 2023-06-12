@@ -1,7 +1,5 @@
 package com.telegram_bot_animal_shelter.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -17,8 +15,8 @@ import java.util.List;
 @Setter
 @EqualsAndHashCode
 @NoArgsConstructor
+@AllArgsConstructor
 @ToString
-@Table(name = "personCat")
 public class PersonCat extends Person {
 
     /**
@@ -26,18 +24,12 @@ public class PersonCat extends Person {
      * @param id
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
-    @JsonIgnore
+    @GeneratedValue
     private Long id;
 
     public PersonCat(String name, int yearOfBirth, String phone, String address, Long chatId, Status status, Cat cat) {
         super(name, yearOfBirth, phone, address, chatId, status);
         this.cat = cat;
-    }
-
-    public PersonCat(String name, int yearOfBirth, String phone, String address, Long chatId, Status status) {
-        super(name, yearOfBirth, phone, address, chatId, status);
     }
 
     /**
