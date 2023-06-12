@@ -2,10 +2,7 @@ package com.telegram_bot_animal_shelter.model;
 
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Lob;
+import javax.persistence.*;
 import java.util.Date;
 
 /**
@@ -96,4 +93,10 @@ public class Report {
      * @param lastMessageMs
      */
     private Long lastMessageMs;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private PersonCat personCat;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private PersonDog personDog;
 }
