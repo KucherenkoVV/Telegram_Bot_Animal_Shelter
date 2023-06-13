@@ -1,6 +1,7 @@
 package com.telegram_bot_animal_shelter.repository;
 
-import com.telegram_bot_animal_shelter.entity.Report;
+import com.telegram_bot_animal_shelter.model.Report;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Set;
