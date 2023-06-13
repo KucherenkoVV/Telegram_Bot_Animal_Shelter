@@ -10,11 +10,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 
-/**
- * Class DogService
- * @author
- * @version 1.0.0
- */
 @Service
 public class DogService implements DogServiceImpl {
 
@@ -26,11 +21,6 @@ public class DogService implements DogServiceImpl {
         this.repository = dogRepository;
     }
 
-    /**
-     * Method for getting dog by id
-     * @param id
-     * @return
-     */
     @Override
     public Dog getByIdDog(Long id) {
         logger.info("Was invoked method to get a dog by id={}", id);
@@ -38,47 +28,27 @@ public class DogService implements DogServiceImpl {
                 .orElseThrow(DogNotFoundException::new);
     }
 
-    /**
-     * Method for adding dog
-     * @param dog
-     * @return
-     */
     @Override
     public Dog addDog(Dog dog) {
         logger.info("Was invoked method to add a dog");
         return this.repository.save(dog);
     }
 
-    /**
-     * Method for updates dog
-     * @param dog
-     * @return
-     */
     @Override
     public Dog updateDog(Dog dog) {
         logger.info("Was invoked method to update a dog");
         if (dog.getId() != null) {
-            if (getByIdDog(dog.getId()) != null) {
-                return this.repository.save(dog);
-            }
+            return this.repository.save(dog);
         }
-            throw new DogNotFoundException();
+        throw new DogNotFoundException();
     }
 
-    /**
-     * Method for getting all dog
-     * @return
-     */
     @Override
     public Collection<Dog> getAllDog() {
         logger.info("Was invoked method to get all dogs");
         return this.repository.findAll();
     }
 
-    /**
-     * Method for remove dog by id
-     * @param id
-     */
     @Override
     public void removeByIdDog(Long id) {
         logger.info("Was invoked method to remove a cat by id={}", id);

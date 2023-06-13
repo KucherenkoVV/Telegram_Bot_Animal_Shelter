@@ -13,11 +13,6 @@ import org.springframework.stereotype.Service;
 import java.util.Collection;
 import java.util.Date;
 
-/**
- * Class ReportService
- * @author
- * @version 1.0.0
- */
 @Service
 public class ReportService implements ReportServiceImpl {
 
@@ -28,20 +23,6 @@ public class ReportService implements ReportServiceImpl {
     public ReportService(ReportRepository repository) {
         this.repository = repository;
     }
-
-    /**
-     * Method to upload reports
-     * @param personId
-     * @param pictureFile
-     * @param file
-     * @param ration
-     * @param health
-     * @param habits
-     * @param filePath
-     * @param dateSendMessage
-     * @param timeDate
-     * @param daysOfReports
-     */
     @Override
     public void uploadReport(Long personId, byte[] pictureFile, File file, String ration, String health, String habits,
                              String filePath, Date dateSendMessage, Long timeDate, long daysOfReports) {
@@ -61,59 +42,25 @@ public class ReportService implements ReportServiceImpl {
         this.repository.save(report);
     }
 
-    /**
-     * Method for getting reports by id
-     * @param id
-     * @return
-     */
     @Override
-    public Report getByIdReport(Long id) {
+    public Report findByIdReport(Long id) {
         logger.info("Was invoked method to get a report by id={}", id);
         return this.repository.findById(id)
                 .orElseThrow(ReportNotFoundException::new);
     }
 
-    /**
-     * Method for getting all reports
-     * @return
-     */
     @Override
     public Collection<Report> getAllReport() {
         logger.info("Was invoked method to get all reports");
         return this.repository.findAll();
     }
 
-    /**
-     * Method for adding reports
-     * @param report
-     * @return
-     */
     @Override
     public Report addReport(Report report) {
         logger.info("Was invoked method to add a report");
         return this.repository.save(report);
     }
 
-    /**
-     * Method for updates reports
-     * @param report
-     * @return
-     */
-    @Override
-    public Report updateReport(Report report) {
-        logger.info("Was invoked method to update a report");
-        if (report.getId() != null) {
-            if (getByIdReport(report.getId()) != null) {
-                return this.repository.save(report);
-            }
-        }
-        throw new ReportNotFoundException();
-    }
-
-    /**
-     * Method for remove reports by id
-     * @param id
-     */
     @Override
     public void removeByIdReport(Long id) {
         logger.info("Was invoked method to remove a report by id={}", id);
