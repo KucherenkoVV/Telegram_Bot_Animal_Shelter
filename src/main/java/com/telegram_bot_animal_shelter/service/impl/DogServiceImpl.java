@@ -1,4 +1,18 @@
 package com.telegram_bot_animal_shelter.service.impl;
 
-public interface DogServiceImpl {
+import com.telegram_bot_animal_shelter.model.Dog;
+
+import java.util.Collection;
+
+public interface DogServiceImpl  {
+
+    Dog getByIdDog(Long id);
+
+    Dog addDog(Dog dog);
+
+    Dog updateDog(Dog dog);
+
+    Collection<Dog> getAllDog();
+
+    void removeByIdDog(Long id);
 }
