@@ -7,15 +7,11 @@ import org.springframework.stereotype.Repository;
 import java.util.Set;
 
 /**
- * Интерфейс ReportRepository
- * @author Zhitar Vladislav
+ * Interface ReportRepository
+ * @author
  * @version 1.0.0
  */
 @Repository
 public interface ReportRepository extends JpaRepository<Report, Long> {
-
-    Set<Report> findListByChatId(Long id);
-
-    Report findByChatId(Long id);
 
 }
