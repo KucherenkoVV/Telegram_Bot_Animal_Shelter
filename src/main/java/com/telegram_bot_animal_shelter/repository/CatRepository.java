@@ -7,11 +7,10 @@ import org.springframework.stereotype.Repository;
 
 
 /**
- * Интерфейс CatRepository
- * @author Vladislav Zhitar
+ * Interface CatRepository
+ * @author
  * @version 1.0.0
  */
 @Repository
 public interface CatRepository extends JpaRepository<Cat, Long> {
-
 }

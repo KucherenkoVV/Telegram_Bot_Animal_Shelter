@@ -4,6 +4,11 @@ import com.telegram_bot_animal_shelter.model.Dog;
 
 import java.util.Collection;
 
+/**
+ * Interface DogServiceImpl
+ * @author
+ * @version 1.0.0
+ */
 public interface DogServiceImpl  {
 
     Dog getByIdDog(Long id);
