@@ -13,5 +13,4 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface CatRepository extends JpaRepository<Cat, Long> {
-
 }
