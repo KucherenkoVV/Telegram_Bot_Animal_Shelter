@@ -32,6 +32,10 @@ public class PersonDog extends Person{
         this.dog = dog;
     }
 
+    public PersonDog(String name, int yearOfBirth, String phone, String address, Long chatId, Status status) {
+        super(name, yearOfBirth, phone, address, chatId, status);
+    }
+
     /**
      * Connect to entity dog, One person can have One dog
      * @param dog
