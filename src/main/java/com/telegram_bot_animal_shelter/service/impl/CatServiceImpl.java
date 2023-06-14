@@ -4,6 +4,11 @@ import com.telegram_bot_animal_shelter.model.Cat;
 
 import java.util.Collection;
 
+/**
+ * Interface CatServiceImpl
+ * @author
+ * @version 1.0.0
+ */
 public interface CatServiceImpl {
     Cat getByIdCat(Long id);
 
