@@ -1,5 +1,6 @@
 package com.telegram_bot_animal_shelter.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -17,6 +18,7 @@ import java.util.List;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name = "personDog")
 public class PersonDog extends Person{
 
     /**
@@ -24,7 +26,9 @@ public class PersonDog extends Person{
      * @param id
      */
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
+    @JsonIgnore
     private Long id;
 
     public PersonDog(String name, int yearOfBirth, String phone, String address, Long chatId, Status status, Dog dog) {
