@@ -1,5 +1,6 @@
 package com.telegram_bot_animal_shelter.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -17,6 +18,7 @@ import java.util.Date;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name = "report")
 public class Report {
 
     /**
@@ -25,48 +27,63 @@ public class Report {
      */
     @Id
     @GeneratedValue
+    @JsonIgnore
     private Long id;
 
     /**
      * Parameter for connect entity report in telegram bot with person who gives a pet
      * @param chatId
      */
+    @Basic
+    @Column(name = "chatId", nullable = false)
     private Long chatId;
 
     /**
      * Person send ration his pet
      * @param ration
      */
+    @Basic
+    @Column(name = "ration", nullable = false)
     private String ration;
 
     /**
      * Person send information about ration his new pet
      * @parat health
      */
+    @Basic
+    @Column(name = "health", nullable = false)
     private String health;
 
     /**
      * Person send information about habits his pet, getting new ones or rejecting old ones
      * @param habits
      */
+    @Basic
+    @Column(name = "habits", nullable = false)
     private String habits;
 
     /**
      * How many days person send a report
      * @param days
      */
+    @Basic
+    @Column(name = "days", nullable = false)
     private Long days;
 
     /**
      * Path for file with photo
      * @param filePath
      */
+    @Basic
+    @Column(name = "filePath", nullable = false)
     private String filePath;
 
     /**
      * Size of sent file
      * @param fileSize
      */
+    @Basic
+    @Column(name = "fileSize", nullable = false)
     private Long fileSize;
 
     /**
@@ -80,23 +97,40 @@ public class Report {
      * Caption for file
      * @param caption
      */
+    @Basic
+    @Column(name = "caption", nullable = false)
     private String caption;
 
     /**
      * Date of lastMessage
      * @param lastMessage
      */
+    @Basic
+    @Column(name = "lastMessage", nullable = false)
     private Date lastMessage;
 
     /**
      * Count of last messages
      * @param lastMessageMs
      */
+    @Basic
+    @Column(name = "lastMessageMs", nullable = false)
     private Long lastMessageMs;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "personCat_id", referencedColumnName = "id")
     private PersonCat personCat;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "personDog_id", referencedColumnName = "id")
     private PersonDog personDog;
+
+    public Report(Long chatId, String ration, String health, String habits, Long days, String caption) {
+        this.chatId = chatId;
+        this.ration = ration;
+        this.health = health;
+        this.habits = habits;
+        this.days = days;
+        this.caption = caption;
+    }
 }

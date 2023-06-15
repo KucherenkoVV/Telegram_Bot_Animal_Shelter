@@ -12,6 +12,7 @@ import java.util.Collection;
 
 /**
  * Class CatService
+ *
  * @author
  * @version 1.0.0
  */
@@ -28,6 +29,7 @@ public class CatService implements CatServiceImpl {
 
     /**
      * Method for getting cats by id
+     *
      * @param id
      * @return
      */
@@ -40,6 +42,7 @@ public class CatService implements CatServiceImpl {
 
     /**
      * Method for adding cats
+     *
      * @param cat
      * @return
      */
@@ -51,6 +54,7 @@ public class CatService implements CatServiceImpl {
 
     /**
      * Method for updates cats
+     *
      * @param cat
      * @return
      */
@@ -67,6 +71,7 @@ public class CatService implements CatServiceImpl {
 
     /**
      * Method for getting all cats
+     *
      * @return
      */
     @Override
@@ -77,6 +82,7 @@ public class CatService implements CatServiceImpl {
 
     /**
      * Method for remove cats by id
+     *
      * @param id
      */
     @Override
