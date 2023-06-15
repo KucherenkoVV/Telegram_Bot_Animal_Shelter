@@ -83,6 +83,7 @@ public class PersonDogServiceImplTest {
         personDog1.setAddress(ADDRESS);
         personDog1.setChatId(CHAT_ID);
         personDog1.setStatus(STATUS);
+        personDog1.setId(1L);
         Mockito.when(personDogRepositoryMock.findById(any(Long.class))).thenReturn(Optional.of(personDog1));
         Mockito.when(personDogRepositoryMock.save(any(PersonDog.class))).thenReturn(personDog1);
         PersonDog personDog2 = personDogService.updatePersonDog(personDog1);
