@@ -3,6 +3,7 @@ package com.telegram_bot_animal_shelter.service;
 import com.telegram_bot_animal_shelter.model.PersonCat;
 import com.telegram_bot_animal_shelter.model.Status;
 import com.telegram_bot_animal_shelter.repository.PersonCatRepository;
+import com.telegram_bot_animal_shelter.service.impl.PersonCatServiceImpl;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -21,7 +22,7 @@ import static org.mockito.ArgumentMatchers.any;
  * @version 1.0.0
  */
 @ExtendWith(MockitoExtension.class)
-public class PersonCatServiceImplTest {
+public class PersonCatServiceImplImplTest {
     private static final String PERSON_NAME = "Артём";
     private static final int YEAR_OF_BIRTH = 2000;
     private static final String PHONE = "+77777777777";
@@ -37,7 +38,7 @@ public class PersonCatServiceImplTest {
     private PersonCatRepository personCatRepositoryMock;
 
     @InjectMocks
-    private PersonCatService personCatService;
+    private PersonCatServiceImpl personCatServiceImpl;
 
     private final PersonCat personCat = new PersonCat(PERSON_NAME, YEAR_OF_BIRTH, PHONE, ADDRESS, CHAT_ID, STATUS);
 
@@ -47,7 +48,7 @@ public class PersonCatServiceImplTest {
     @Test
     public void getByIdPersonCat() {
         Mockito.when(personCatRepositoryMock.findById(any(Long.class))).thenReturn(Optional.of(personCat));
-        PersonCat cat = personCatService.getByIdPersonCat(1L);
+        PersonCat cat = personCatServiceImpl.getByIdPersonCat(1L);
         Assertions.assertThat(cat.getId()).isEqualTo(personCat.getId());
         Assertions.assertThat(cat.getName()).isEqualTo(personCat.getName());
         Assertions.assertThat(cat.getYearOfBirth()).isEqualTo(personCat.getYearOfBirth());
@@ -62,7 +63,7 @@ public class PersonCatServiceImplTest {
     @Test
     public void addPersonCat() {
         Mockito.when(personCatRepositoryMock.save(any(PersonCat.class))).thenReturn(personCat);
-        PersonCat cat = personCatService.addPersonCat(personCat);
+        PersonCat cat = personCatServiceImpl.addPersonCat(personCat);
         Assertions.assertThat(cat.getId()).isEqualTo(personCat.getId());
         Assertions.assertThat(cat.getName()).isEqualTo(personCat.getName());
         Assertions.assertThat(cat.getYearOfBirth()).isEqualTo(personCat.getYearOfBirth());
@@ -85,7 +86,7 @@ public class PersonCatServiceImplTest {
         personCat1.setStatus(STATUS);
         Mockito.when(personCatRepositoryMock.findById(any(Long.class))).thenReturn(Optional.of(personCat1));
         Mockito.when(personCatRepositoryMock.save(any(PersonCat.class))).thenReturn(personCat1);
-        PersonCat personCat2 = personCatService.updatePersonCat(personCat1);
+        PersonCat personCat2 = personCatServiceImpl.updatePersonCat(personCat1);
         Assertions.assertThat(personCat2.getName()).isEqualTo(personCat1.getName());
         Assertions.assertThat(personCat2.getYearOfBirth()).isEqualTo(personCat1.getYearOfBirth());
         Assertions.assertThat(personCat2.getPhone()).isEqualTo(personCat1.getPhone());
@@ -100,7 +101,7 @@ public class PersonCatServiceImplTest {
     @Test
     public void getAllPersonCat() {
         Mockito.when(personCatRepositoryMock.findAll()).thenReturn(personCats);
-        Collection<PersonCat> cat = personCatService.getAllPersonCat();
+        Collection<PersonCat> cat = personCatServiceImpl.getAllPersonCat();
         Assertions.assertThat(cat.size()).isEqualTo(personCats.size());
         Assertions.assertThat(cat).isEqualTo(personCats);
     }

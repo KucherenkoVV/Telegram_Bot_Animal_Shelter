@@ -3,6 +3,7 @@ package com.telegram_bot_animal_shelter.service;
 import com.telegram_bot_animal_shelter.model.PersonDog;
 import com.telegram_bot_animal_shelter.model.Status;
 import com.telegram_bot_animal_shelter.repository.PersonDogRepository;
+import com.telegram_bot_animal_shelter.service.impl.PersonDogServiceImpl;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -37,7 +38,7 @@ public class PersonDogServiceImplTest {
     private PersonDogRepository personDogRepositoryMock;
 
     @InjectMocks
-    private PersonDogService personDogService;
+    private PersonDogServiceImpl personDogServiceImpl;
 
     private final PersonDog personDog = new PersonDog(PERSON_NAME, YEAR_OF_BIRTH, PHONE, ADDRESS, CHAT_ID, STATUS);
 
@@ -47,7 +48,7 @@ public class PersonDogServiceImplTest {
     @Test
     public void getByIdPersonDog() {
         Mockito.when(personDogRepositoryMock.findById(any(Long.class))).thenReturn(Optional.of(personDog));
-        PersonDog dog = personDogService.getByIdPersonDog(1L);
+        PersonDog dog = personDogServiceImpl.getByIdPersonDog(1L);
         Assertions.assertThat(dog.getId()).isEqualTo(personDog.getId());
         Assertions.assertThat(dog.getName()).isEqualTo(personDog.getName());
         Assertions.assertThat(dog.getYearOfBirth()).isEqualTo(personDog.getYearOfBirth());
@@ -62,7 +63,7 @@ public class PersonDogServiceImplTest {
     @Test
     public void addPersonDog() {
         Mockito.when(personDogRepositoryMock.save(any(PersonDog.class))).thenReturn(personDog);
-        PersonDog personDog1 = personDogService.addPersonDog(personDog);
+        PersonDog personDog1 = personDogServiceImpl.addPersonDog(personDog);
         Assertions.assertThat(personDog1.getId()).isEqualTo(personDog.getId());
         Assertions.assertThat(personDog1.getName()).isEqualTo(personDog.getName());
         Assertions.assertThat(personDog1.getYearOfBirth()).isEqualTo(personDog.getYearOfBirth());
@@ -85,7 +86,7 @@ public class PersonDogServiceImplTest {
         personDog1.setStatus(STATUS);
         Mockito.when(personDogRepositoryMock.findById(any(Long.class))).thenReturn(Optional.of(personDog1));
         Mockito.when(personDogRepositoryMock.save(any(PersonDog.class))).thenReturn(personDog1);
-        PersonDog personDog2 = personDogService.updatePersonDog(personDog1);
+        PersonDog personDog2 = personDogServiceImpl.updatePersonDog(personDog1);
         Assertions.assertThat(personDog2.getName()).isEqualTo(personDog1.getName());
         Assertions.assertThat(personDog2.getYearOfBirth()).isEqualTo(personDog1.getYearOfBirth());
         Assertions.assertThat(personDog2.getPhone()).isEqualTo(personDog1.getPhone());
@@ -100,7 +101,7 @@ public class PersonDogServiceImplTest {
     @Test
     public void getAllPersonDog() {
         Mockito.when(personDogRepositoryMock.findAll()).thenReturn(personDogs);
-        Collection<PersonDog> personDog1 = personDogService.getAllPersonDog();
+        Collection<PersonDog> personDog1 = personDogServiceImpl.getAllPersonDog();
         Assertions.assertThat(personDog1.size()).isEqualTo(personDogs.size());
         Assertions.assertThat(personDog1).isEqualTo(personDogs);
     }

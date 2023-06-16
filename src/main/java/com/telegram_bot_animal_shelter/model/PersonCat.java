@@ -25,7 +25,7 @@ public class PersonCat extends Person {
      */
     @Id
     @GeneratedValue
-    @JsonIgnore
+    @Column(name = "id")
     private Long id;
 
     public PersonCat(String name, int yearOfBirth, String phone, String address, Long chatId, Status status, Cat cat) {
@@ -45,7 +45,7 @@ public class PersonCat extends Person {
     @JoinColumn(name = "cat_id", referencedColumnName = "id")
     private Cat cat;
 
-    @OneToMany(mappedBy = "PersonCat", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "id", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     List<Report> reports;
 
 }
