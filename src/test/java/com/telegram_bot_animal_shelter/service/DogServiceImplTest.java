@@ -2,6 +2,7 @@ package com.telegram_bot_animal_shelter.service;
 
 import com.telegram_bot_animal_shelter.model.Dog;
 import com.telegram_bot_animal_shelter.repository.DogRepository;
+import com.telegram_bot_animal_shelter.service.impl.DogServiceImpl;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -35,7 +36,7 @@ public class DogServiceImplTest {
     @Mock
     private DogRepository dogRepositoryMock;
     @InjectMocks
-    private DogService dogService;
+    private DogServiceImpl dogServiceImpl;
 
     /**
      * Testing method for getById dogs
@@ -43,7 +44,7 @@ public class DogServiceImplTest {
     @Test
     public void getByIdDog() {
         Mockito.when(dogRepositoryMock.findById(any(Long.class))).thenReturn(Optional.of(dog));
-        Dog dog1 = dogService.getByIdDog(1L);
+        Dog dog1 = dogServiceImpl.getByIdDog(1L);
         Assertions.assertThat(dog1.getName()).isEqualTo(dog.getName());
         Assertions.assertThat(dog1.getBreed()).isEqualTo(dog.getBreed());
         Assertions.assertThat(dog1.getDescription()).isEqualTo(dog.getDescription());
@@ -56,7 +57,7 @@ public class DogServiceImplTest {
     @Test
     public void addDog() {
         Mockito.when(dogRepositoryMock.save(any(Dog.class))).thenReturn(dog);
-        Dog dog1 = dogService.addDog(dog);
+        Dog dog1 = dogServiceImpl.addDog(dog);
         Assertions.assertThat(dog1.getName()).isEqualTo(dog.getName());
         Assertions.assertThat(dog1.getBreed()).isEqualTo(dog.getBreed());
         Assertions.assertThat(dog1.getDescription()).isEqualTo(dog.getDescription());
@@ -76,7 +77,7 @@ public class DogServiceImplTest {
         dog1.setId(1L);
         Mockito.when(dogRepositoryMock.findById(any(Long.class))).thenReturn(Optional.of(dog1));
         Mockito.when(dogRepositoryMock.save(any(Dog.class))).thenReturn(dog1);
-        Dog dog2 = dogService.updateDog(dog1);
+        Dog dog2 = dogServiceImpl.updateDog(dog1);
         Assertions.assertThat(dog2.getName()).isEqualTo(dog1.getName());
         Assertions.assertThat(dog2.getBreed()).isEqualTo(dog1.getBreed());
         Assertions.assertThat(dog2.getDescription()).isEqualTo(dog1.getDescription());
@@ -89,7 +90,7 @@ public class DogServiceImplTest {
     @Test
     public void getAllDogs() {
         Mockito.when(dogRepositoryMock.findAll()).thenReturn(dogs);
-        Collection<Dog> dog = dogService.getAllDog();
+        Collection<Dog> dog = dogServiceImpl.getAllDog();
         Assertions.assertThat(dog.size()).isEqualTo(dogs.size());
         Assertions.assertThat(dog).isEqualTo(dogs);
     }
