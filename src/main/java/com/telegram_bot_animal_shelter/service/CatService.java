@@ -34,6 +34,7 @@ public class CatService implements CatServiceImpl {
      * @return
      */
     @Override
+
     public Cat getByIdCat(Long id) {
         logger.info("Was invoked method to get a cat by id={}", id);
         return this.repository.findById(id)
