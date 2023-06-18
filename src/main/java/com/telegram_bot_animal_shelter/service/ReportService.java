@@ -15,7 +15,7 @@ import java.util.Date;
 
 /**
  * Class ReportService
- * @author
+ * @author Zhitar Vlad
  * @version 1.0.0
  */
 @Service

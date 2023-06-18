@@ -16,7 +16,7 @@ import static org.mockito.ArgumentMatchers.any;
 
 /**
  * Class DogServiceImplTest
- * @author
+ * @author Zhitar Vlad
  * @version 1.0.0
  */
 @ExtendWith(MockitoExtension.class)

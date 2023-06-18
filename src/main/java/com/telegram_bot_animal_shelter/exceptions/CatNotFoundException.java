@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
  * Class CatNotFoundException
- * @author
+ * @author Zhitar Vlad
  * @version 1.0.0
  */
 @ResponseStatus(HttpStatus.NOT_FOUND)

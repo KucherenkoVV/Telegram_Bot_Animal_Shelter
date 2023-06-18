@@ -6,7 +6,7 @@ import java.util.Collection;
 
 /**
  * Interface PersonCatServiceImpl
- * @author
+ * @author Zhitar Vlad
  * @version 1.0.0
  */
 public interface PersonCatServiceImpl {

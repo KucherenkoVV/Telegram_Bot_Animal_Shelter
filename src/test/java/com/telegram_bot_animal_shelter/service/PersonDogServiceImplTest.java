@@ -17,7 +17,7 @@ import static org.mockito.ArgumentMatchers.any;
 
 /**
  * Class PersonCatServiceImplTest
- * @author
+ * @author Zhitar Vlad
  * @version 1.0.0
  */
 @ExtendWith(MockitoExtension.class)

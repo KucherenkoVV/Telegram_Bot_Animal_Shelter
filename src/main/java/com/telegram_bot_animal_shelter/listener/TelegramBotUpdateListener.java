@@ -16,7 +16,8 @@ import javax.annotation.PostConstruct;
 import java.util.List;
 
 /**
- * @author Zhitar Vladislav
+ * Class TelegramBotUpdateListener
+ * @author Zhitar Vlad
  * @version 1.0.0
  */
 
