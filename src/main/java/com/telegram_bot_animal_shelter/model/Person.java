@@ -9,6 +9,7 @@ import javax.persistence.MappedSuperclass;
 @EqualsAndHashCode
 @ToString
 @NoArgsConstructor
+@MappedSuperclass
 public abstract class Person {
 
     /**

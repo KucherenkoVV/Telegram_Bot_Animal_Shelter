@@ -1,7 +1,7 @@
 package com.telegram_bot_animal_shelter.controllers;
 
 import com.telegram_bot_animal_shelter.model.Cat;
-import com.telegram_bot_animal_shelter.service.impl.CatServiceImpl;
+import com.telegram_bot_animal_shelter.service.CatService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -21,9 +21,9 @@ import java.util.Collection;
 @RequestMapping("cat")
 public class CatController {
 
-    private final CatServiceImpl catServiceImpl;
+    private final CatService catServiceImpl;
 
-    public CatController(CatServiceImpl catServiceImpl) {
+    public CatController(CatService catServiceImpl) {
         this.catServiceImpl = catServiceImpl;
     }
 
