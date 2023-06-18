@@ -1,12 +1,13 @@
 package com.telegram_bot_animal_shelter.controllers;
 
 import com.telegram_bot_animal_shelter.model.Cat;
-import com.telegram_bot_animal_shelter.service.CatService;
+import com.telegram_bot_animal_shelter.service.impl.CatServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import com.telegram_bot_animal_shelter.service.CatService;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,9 +22,9 @@ import java.util.Collection;
 @RequestMapping("cat")
 public class CatController {
 
-    private final CatService catServiceImpl;
+    private final CatServiceImpl catServiceImpl;
 
-    public CatController(CatService catServiceImpl) {
+    public CatController(CatServiceImpl catServiceImpl) {
         this.catServiceImpl = catServiceImpl;
     }
 
