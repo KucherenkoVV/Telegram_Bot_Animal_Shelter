@@ -88,7 +88,7 @@ public class CatServiceImplImplTest {
      * Testing method for getting all cats
      */
     @Test
-    public void getAllTest() {
+    public void getAllCats() {
         Mockito.when(catRepositoryMock.findAll()).thenReturn(cats);
         Collection<Cat> cat = catServiceImpl.getAllCat();
         Assertions.assertThat(cat.size()).isEqualTo(cats.size());

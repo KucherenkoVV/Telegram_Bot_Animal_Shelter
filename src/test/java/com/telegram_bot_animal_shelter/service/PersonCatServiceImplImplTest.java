@@ -84,7 +84,6 @@ public class PersonCatServiceImplImplTest {
         personCat1.setAddress(ADDRESS);
         personCat1.setChatId(CHAT_ID);
         personCat1.setStatus(STATUS);
-        personCat1.setId(1L);
         Mockito.when(personCatRepositoryMock.findById(any(Long.class))).thenReturn(Optional.of(personCat1));
         Mockito.when(personCatRepositoryMock.save(any(PersonCat.class))).thenReturn(personCat1);
         PersonCat personCat2 = personCatServiceImpl.updatePersonCat(personCat1);
