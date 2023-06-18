@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class KeyBoardShelter {
 
+    @Autowired
     private TelegramBot telegramBot;
 
     private static final Logger logger = LoggerFactory.getLogger(TelegramBotUpdateListener.class);
