@@ -2,8 +2,10 @@ package com.telegram_bot_animal_shelter.model;
 
 import lombok.*;
 
+import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.Table;
 
 @Getter
 @Setter
@@ -18,28 +20,32 @@ public abstract class Animal {
      * Cat name
      * @param name
      */
-    @Column(name = "name")
+    @Basic
+    @Column(name = "name", nullable = false)
     private String name;
 
     /**
      * Pet breed. Like: Britain, Norwegian forest,
      * @param breed
      */
-    @Column(name = "breed")
+    @Basic
+    @Column(name = "breed", nullable = false)
     private String breed;
 
     /**
      * Pet age
      * @param age
      */
-    @Column(name = "age")
+    @Basic
+    @Column(name = "age", nullable = false)
     private int age;
 
     /**
      * Additional information about the pet: habbits, health, features
      * @param description
      */
-    @Column(name = "description")
+    @Basic
+    @Column(name = "description", nullable = false)
     private String description;
 
 }
