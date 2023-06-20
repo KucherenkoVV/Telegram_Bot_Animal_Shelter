@@ -1,6 +1,5 @@
-package com.telegram_bot_animal_shelter.controller;
+package com.telegram_bot_animal_shelter.controllers;
 
-import com.telegram_bot_animal_shelter.controllers.DogController;
 import com.telegram_bot_animal_shelter.model.Dog;
 import com.telegram_bot_animal_shelter.service.DogService;
 import org.json.JSONObject;
