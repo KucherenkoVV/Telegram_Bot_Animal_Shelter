@@ -1,8 +1,9 @@
 package com.telegram_bot_animal_shelter.service.impl;
 
-import com.telegram_bot_animal_shelter.exceptions.CatNotFoundException;
+
 import com.telegram_bot_animal_shelter.model.Cat;
 import com.telegram_bot_animal_shelter.repository.CatRepository;
+import com.telegram_bot_animal_shelter.exceptions.CatNotFoundException;
 import com.telegram_bot_animal_shelter.service.CatService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
