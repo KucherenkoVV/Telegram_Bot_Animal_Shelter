@@ -33,14 +33,12 @@ public class KeyBoardShelter {
 
         ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup(
                 new KeyboardButton("Информация о возможностях бота"),
-                new KeyboardButton("Узнать информацию о приюте"));
+                new KeyboardButton("Информация о приюте"));
         replyKeyboardMarkup.addRow(new KeyboardButton("Как взять питомца из приюта"),
                 new KeyboardButton("Прислать отчет о питомце"));
-        replyKeyboardMarkup.addRow(new KeyboardButton("Позвать волонтера"));
+        replyKeyboardMarkup.addRow(new KeyboardButton("Обратиться к волонтеру"));
 
-        replyKeyboardMarkup.resizeKeyboard(true);
-        replyKeyboardMarkup.oneTimeKeyboard(false);
-        replyKeyboardMarkup.selective(false);
+        keyboardUpdate(replyKeyboardMarkup);
 
         SendMessage request = new SendMessage(chatId, "Добро пожаловать, в наш приют")
                 .replyMarkup(replyKeyboardMarkup)
@@ -66,25 +64,25 @@ public class KeyBoardShelter {
     public void sendMenuInfoShelter(long chatId) {
         logger.info("Starting menu information about animal shelter: {}, {}", chatId, "Вызвано меню: Информация о приюте");
 
-        ReplyKeyboardMarkup replyKeyboardMarkup2 = new ReplyKeyboardMarkup(new KeyboardButton("Статья"),
-                new KeyboardButton("Оставить контактные данные").requestContact(true));
+        ReplyKeyboardMarkup replyKeyboardMarkup2 = new ReplyKeyboardMarkup(new KeyboardButton("О приюте"),
+                new KeyboardButton("Оставить контактные данные").requestContact(true))
+                .addRow(new KeyboardButton("Схема проезда, пропуск"), new KeyboardButton("Техника безопасности"));
         repeatableMenu(chatId, replyKeyboardMarkup2);
     }
 
     /**
-     *
+     * Repeatable menu about volunteer and shelter.
      * @param chatId
      * @param replyKeyboardMarkup2
      */
     private void repeatableMenu(long chatId, ReplyKeyboardMarkup replyKeyboardMarkup2) {
-        replyKeyboardMarkup2.addRow(new KeyboardButton("Позвать волонтера"),
-                new KeyboardButton("Вернуться в меню"));
+        replyKeyboardMarkup2.addRow(new KeyboardButton("Обратиться к волонтеру"),
+                new KeyboardButton("Вернуться в меню"))
+                .addRow(new KeyboardButton("Вернуться к выбору приюта"));
 
-        replyKeyboardMarkup2.resizeKeyboard(true);
-        replyKeyboardMarkup2.oneTimeKeyboard(false);
-        replyKeyboardMarkup2.selective(false);
+        keyboardUpdate(replyKeyboardMarkup2);
 
-        SendMessage request = new SendMessage(chatId, "Информацию о приюте")
+        SendMessage request = new SendMessage(chatId, "Здесь вы сможете найти всю необходимую информацию.")
                 .replyMarkup(replyKeyboardMarkup2)
                 .parseMode(ParseMode.HTML)
                 .disableWebPagePreview(true);
@@ -106,10 +104,45 @@ public class KeyBoardShelter {
      * @see KeyBoardShelter
      */
     public void sendMenuTakeAnimal(long chatId) {
-        logger.info("Starting menu about take animal from shelter: {}, {}", chatId, "вызвали Как взять питомца из приюта");
+        logger.info("Starting menu about take animal from shelter: {}, {}", chatId, "меню: Как взять питомца из приюта");
 
-        ReplyKeyboardMarkup replyKeyboardMarkup3 = new ReplyKeyboardMarkup(new KeyboardButton("Кидает на статью"),
-                new KeyboardButton("Оставить контактные данные"));
+        ReplyKeyboardMarkup replyKeyboardMarkup3 = new ReplyKeyboardMarkup(new KeyboardButton("Советы и рекомендации"),
+                new KeyboardButton("Оставить контактные данные"))
+                .addRow(new KeyboardButton("Необходимые документы"), new KeyboardButton("Взять питомца с ограниченными возможностями"));
         repeatableMenu(chatId, replyKeyboardMarkup3);
+    }
+
+    public void chooseMenu(long chatId) {
+        logger.info("Method sendMessage has been run: {}, {}", chatId, "Вызвано меню выбора ");
+
+        String cat = "Кошка";
+        String dog = "Собака";
+        ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup(
+                new KeyboardButton(cat));
+        replyKeyboardMarkup.addRow(new KeyboardButton(dog));
+        returnResponseReplyKeyboardMarkup(replyKeyboardMarkup, chatId, "Выберите, кого хотите приютить:");
+    }
+
+    public void returnResponseReplyKeyboardMarkup(ReplyKeyboardMarkup replyKeyboardMarkup, Long chatId, String text) {
+        keyboardUpdate(replyKeyboardMarkup);
+
+        SendMessage request = new SendMessage(chatId, text)
+                .replyMarkup(replyKeyboardMarkup)
+                .parseMode(ParseMode.HTML)
+                .disableWebPagePreview(true);
+        SendResponse sendResponse = telegramBot.execute(request);
+
+        if (!sendResponse.isOk()) {
+            int codeError = sendResponse.errorCode();
+            String description = sendResponse.description();
+            logger.info("code of error: {}", codeError);
+            logger.info("description -: {}", description);
+        }
+    }
+
+    private static void keyboardUpdate(ReplyKeyboardMarkup replyKeyboardMarkup) {
+        replyKeyboardMarkup.resizeKeyboard(true);
+        replyKeyboardMarkup.oneTimeKeyboard(false);
+        replyKeyboardMarkup.selective(false);
     }
 }

@@ -2,7 +2,6 @@ package com.telegram_bot_animal_shelter.service;
 
 import com.telegram_bot_animal_shelter.model.Cat;
 import com.telegram_bot_animal_shelter.repository.CatRepository;
-import com.telegram_bot_animal_shelter.service.impl.CatServiceImpl;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,11 +16,11 @@ import static org.mockito.ArgumentMatchers.any;
 
 /**
  * Class CatServiceImplTest
- * @author
+ * @author Zhitar Vlad
  * @version 1.0.0
  */
 @ExtendWith(MockitoExtension.class)
-public class CatServiceImplImplTest {
+public class CatServiceImplTest {
 
     private static final String NAME = "Барсик";
     private static final String DESCRIPTION = "DESCRIPTION";
@@ -36,7 +35,7 @@ public class CatServiceImplImplTest {
     @Mock
     private CatRepository catRepositoryMock;
     @InjectMocks
-    private CatServiceImpl catServiceImpl;
+    private CatService catService;
 
     /**
      * Testing method for getById cats
@@ -44,7 +43,7 @@ public class CatServiceImplImplTest {
     @Test
     public void getByIdCat() {
         Mockito.when(catRepositoryMock.findById(any(Long.class))).thenReturn(Optional.of(cat));
-        Cat cat1 = catServiceImpl.getByIdCat(1L);
+        Cat cat1 = catService.getByIdCat(1L);
         Assertions.assertThat(cat1.getName()).isEqualTo(cat.getName());
         Assertions.assertThat(cat1.getBreed()).isEqualTo(cat.getBreed());
         Assertions.assertThat(cat1.getDescription()).isEqualTo(cat.getDescription());
@@ -57,7 +56,7 @@ public class CatServiceImplImplTest {
     @Test
     public void addCat() {
         Mockito.when(catRepositoryMock.save(any(Cat.class))).thenReturn(cat);
-        Cat cat1 = catServiceImpl.addCat(cat);
+        Cat cat1 = catService.addCat(cat);
         Assertions.assertThat(cat1.getName()).isEqualTo(cat.getName());
         Assertions.assertThat(cat1.getBreed()).isEqualTo(cat.getBreed());
         Assertions.assertThat(cat1.getDescription()).isEqualTo(cat.getDescription());
@@ -77,7 +76,7 @@ public class CatServiceImplImplTest {
         cat1.setId(1L);
         Mockito.when(catRepositoryMock.findById(any(Long.class))).thenReturn(Optional.of(cat1));
         Mockito.when(catRepositoryMock.save(any(Cat.class))).thenReturn(cat1);
-        Cat cat2 = catServiceImpl.updateCat(cat1);
+        Cat cat2 = catService.updateCat(cat1);
         Assertions.assertThat(cat2.getName()).isEqualTo(cat1.getName());
         Assertions.assertThat(cat2.getBreed()).isEqualTo(cat1.getBreed());
         Assertions.assertThat(cat2.getDescription()).isEqualTo(cat1.getDescription());
@@ -90,7 +89,7 @@ public class CatServiceImplImplTest {
     @Test
     public void getAllCats() {
         Mockito.when(catRepositoryMock.findAll()).thenReturn(cats);
-        Collection<Cat> cat = catServiceImpl.getAllCat();
+        Collection<Cat> cat = catService.getAllCat();
         Assertions.assertThat(cat.size()).isEqualTo(cats.size());
         Assertions.assertThat(cat).isEqualTo(cats);
     }
