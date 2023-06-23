@@ -37,6 +37,10 @@ public class PersonCat extends Person {
         super(name, yearOfBirth, phone, address, chatId, status);
     }
 
+    public PersonCat(String name, String phone, Long chatId) {
+        super(name, phone, chatId);
+    }
+
     /**
      * Connect to entity cat, One person can have One cat
      * @param cat
