@@ -31,13 +31,12 @@ import java.net.URL;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 import static com.telegram_bot_animal_shelter.constants.StringConstants.*;
 
 /**
- * @author Zhitar Vladislav
- * @version 1.0.0
+ * @author Kucherenko V.V
+ * @version 0.0.1
  */
 
 @Component
@@ -70,16 +69,10 @@ public class TelegramBotUpdateListener implements UpdatesListener {
 
     private boolean isCat = false;
 
-    private PersonCat personCat;
-
-    private PersonDog personDog;
-
     /**
      * A method that allows you to track and organize the entire process of communication with the user.
-     *
+     * Choose menu from switch-case after phrase from keyboard button.
      * @param updates
-     * @return
-     * @see TelegramBotUpdateListener
      */
     @Override
     public int process(List<Update> updates) {
@@ -266,7 +259,6 @@ public class TelegramBotUpdateListener implements UpdatesListener {
      * @param chatId
      * @param messageText
      * @param messageId
-     * @see TelegramBotUpdateListener
      */
     public void sendReplyMessage(Long chatId, String messageText, Integer messageId) {
         SendMessage sendMessage = new SendMessage(chatId, messageText);
@@ -279,7 +271,6 @@ public class TelegramBotUpdateListener implements UpdatesListener {
      *
      * @param chatId
      * @param messageId
-     * @see TelegramBotUpdateListener
      */
     public void sendForwardMessage(Long chatId, Integer messageId) {
         ForwardMessage forwardMessage = new ForwardMessage(telegramChatVolunteers, chatId, messageId);
@@ -291,7 +282,6 @@ public class TelegramBotUpdateListener implements UpdatesListener {
      *
      * @param chatId
      * @param text
-     * @see TelegramBotUpdateListener
      */
     public void sendMessage(long chatId, String text) {
         SendMessage message = new SendMessage(chatId, text);
@@ -302,7 +292,6 @@ public class TelegramBotUpdateListener implements UpdatesListener {
      * A method for sharing a contact.
      * What doing: Get contact from Users in TelegramBot and write information in local variables and DB
      * @param update
-     * @see TelegramBotUpdateListener
      */
     public void shareContact(Update update) {
         if (update.message().contact() != null) {
@@ -314,7 +303,7 @@ public class TelegramBotUpdateListener implements UpdatesListener {
             var sortChatId = personDogRepository.findAll().stream()
                     .filter(i -> i.getChatId() == finalChatId).toList();
             var sortChatIdCat = personCatRepository.findAll().stream()
-                    .filter(i -> i.getChatId() == finalChatId).toList();;
+                    .filter(i -> i.getChatId() == finalChatId).toList();
 
             if (!sortChatId.isEmpty() || !sortChatIdCat.isEmpty()) {
                 sendMessage(finalChatId, "Вы уже в базе!");
@@ -323,17 +312,17 @@ public class TelegramBotUpdateListener implements UpdatesListener {
             if (lastName != null) {
                 String name = firstName + " " + lastName + " " + username;
                 if (isCat) {
-                    personCat = personCatRepository.save(new PersonCat(name, phone, finalChatId));
+                    personCatRepository.save(new PersonCat(name, phone, finalChatId));
                 } else {
-                    personDog = personDogRepository.save(new PersonDog(name, phone, finalChatId));
+                    personDogRepository.save(new PersonDog(name, phone, finalChatId));
                 }
                 sendMessage(finalChatId, "Вас успешно добавили в базу. Скоро вам перезвонят.");
                 return;
             }
             if (isCat) {
-                personCat = personCatRepository.save(new PersonCat(firstName, phone, finalChatId));
+                personCatRepository.save(new PersonCat(firstName, phone, finalChatId));
             } else {
-                personDog = personDogRepository.save(new PersonDog(firstName, phone, finalChatId));
+                personDogRepository.save(new PersonDog(firstName, phone, finalChatId));
             }
             sendMessage(finalChatId, "Вас успешно добавили в базу! Скоро вам перезвонят.");
 
@@ -344,9 +333,8 @@ public class TelegramBotUpdateListener implements UpdatesListener {
 
     /**
      * A method that allows you to receive reports.
-     * What doing: send information about received a report by bot.
+     * What doing: send information about received a report by bot
      * @param update
-     * @see TelegramBotUpdateListener
      */
     public void getReport(Update update) {
         Pattern pattern = Pattern.compile(REGEX_MESSAGE);

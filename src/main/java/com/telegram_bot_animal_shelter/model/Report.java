@@ -41,7 +41,7 @@ public class Report {
 
     /**
      * Person send information about ration his new pet
-     * @parat health
+     * @param health
      */
     private String health;
 
@@ -101,4 +101,8 @@ public class Report {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(referencedColumnName = "id")
     private PersonDog personDog;
+
+    public Report(Long chatId, String ration, String health, String habits, Long days, String caption) {
+
+    }
 }
