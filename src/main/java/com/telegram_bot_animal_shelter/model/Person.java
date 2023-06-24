@@ -70,4 +70,10 @@ public abstract class Person {
         this.chatId = chatId;
         this.status = status;
     }
+
+    public Person(String name, String phone, Long chatId) {
+        this.name = name;
+        this.phone = phone;
+        this.chatId = chatId;
+    }
 }
