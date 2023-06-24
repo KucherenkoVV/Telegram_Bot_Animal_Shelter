@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -26,11 +27,13 @@ import java.util.Collection;
 public class ReportController {
 
     private final ReportServiceImpl reportServiceImpl;
-    private final TelegramBotUpdateListener telegramBotUpdateListener;
+    @Autowired
+    private TelegramBotUpdateListener telegramBotUpdateListener;
 
-    public ReportController(ReportServiceImpl reportServiceImpl, TelegramBotUpdateListener telegramBotUpdateListener) {
+    private final String fileType = "image/jpeg";
+
+    public ReportController(ReportServiceImpl reportServiceImpl) {
         this.reportServiceImpl = reportServiceImpl;
-        this.telegramBotUpdateListener = telegramBotUpdateListener;
     }
 
     @Operation(summary = "Просмотр отчетов по id",
@@ -98,7 +101,6 @@ public class ReportController {
         Report reportData = this.reportServiceImpl.getByIdReport(id);
 
         HttpHeaders headers = new HttpHeaders();
-        String fileType = "image/jpeg";
         headers.setContentType(MediaType.parseMediaType(fileType));
         headers.setContentLength(reportData.getData().length);
 
