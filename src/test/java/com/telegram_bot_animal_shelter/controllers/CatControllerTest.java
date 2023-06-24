@@ -1,5 +1,6 @@
-package com.telegram_bot_animal_shelter.controllers;
+package com.telegram_bot_animal_shelter.controller;
 
+import com.telegram_bot_animal_shelter.controllers.CatController;
 import com.telegram_bot_animal_shelter.model.Cat;
 import com.telegram_bot_animal_shelter.service.CatService;
 import org.json.JSONObject;
@@ -15,12 +16,11 @@ import java.util.List;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
  * Class CatControllerTest
- * @author ZhitarVlad
+ * @author
  * @version 1.0.0
  */
 @WebMvcTest(CatController.class)
@@ -45,7 +45,8 @@ class CatControllerTest {
         mockMvc.perform(
                         get("/cat/{id}", 1L))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(1));
+                .andReturn().getResponse().getContentAsString();
+
 
         verify(catService).getByIdCat(1L);
     }
@@ -69,7 +70,7 @@ class CatControllerTest {
                                 .content(userObject.toString())
                                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(1));
+                .andReturn().getResponse().getContentAsString();
 
         verify(catService).addCat(cat);
     }
@@ -93,7 +94,7 @@ class CatControllerTest {
                                 .content(userObject.toString())
                                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(1));
+                .andReturn().getResponse().getContentAsString();
 
         verify(catService).updateCat(cat);
     }

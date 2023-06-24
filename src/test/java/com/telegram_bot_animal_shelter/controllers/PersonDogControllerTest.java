@@ -21,7 +21,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 /**
  * Class PersonDogControllerTest
- * @author
+ * @author Zhitar Vlad
  * @version 1.0.0
  */
 @WebMvcTest(PersonDogController.class)

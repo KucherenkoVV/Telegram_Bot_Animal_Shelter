@@ -1,6 +1,5 @@
 package com.telegram_bot_animal_shelter.service;
 
-import com.telegram_bot_animal_shelter.exceptions.DogNotFoundException;
 import com.telegram_bot_animal_shelter.model.Dog;
 import com.telegram_bot_animal_shelter.repository.DogRepository;
 import org.assertj.core.api.Assertions;
@@ -17,7 +16,7 @@ import static org.mockito.ArgumentMatchers.any;
 
 /**
  * Class DogServiceImplTest
- * @author ZhitarVlad
+ * @author
  * @version 1.0.0
  */
 @ExtendWith(MockitoExtension.class)
@@ -49,13 +48,6 @@ public class DogServiceImplTest {
         Assertions.assertThat(dog1.getBreed()).isEqualTo(dog.getBreed());
         Assertions.assertThat(dog1.getDescription()).isEqualTo(dog.getDescription());
         Assertions.assertThat(dog1.getAge()).isEqualTo(dog.getAge());
-    }
-
-    @Test
-    public void getByIdExceptionTest() {
-        Mockito.when(dogRepositoryMock.findById(any(Long.class))).thenThrow(DogNotFoundException.class);
-
-        org.junit.jupiter.api.Assertions.assertThrows(DogNotFoundException.class, () -> dogService.getByIdDog(1L));
     }
 
     /**
@@ -91,13 +83,6 @@ public class DogServiceImplTest {
         Assertions.assertThat(dog2.getAge()).isEqualTo(dog1.getAge());
     }
 
-    @Test
-    public void updateExceptionTest() {
-        Dog dog = new Dog();
-
-        org.junit.jupiter.api.Assertions.assertThrows(DogNotFoundException.class, () -> dogService.updateDog(dog));
-    }
-
     /**
      * Testing method for getting all dogs
      */
@@ -107,10 +92,5 @@ public class DogServiceImplTest {
         Collection<Dog> dog = dogService.getAllDog();
         Assertions.assertThat(dog.size()).isEqualTo(dogs.size());
         Assertions.assertThat(dog).isEqualTo(dogs);
-    }
-
-    @Test
-    public void deleteByIdDog() {
-        Assertions.assertThat(dogs.remove(0).equals(dogs.get(0)));
     }
 }

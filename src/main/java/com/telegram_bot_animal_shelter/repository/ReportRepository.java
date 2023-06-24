@@ -8,7 +8,7 @@ import java.util.Set;
 
 /**
  * Interface ReportRepository
- * @author
+ * @author Zhitar Vlad
  * @version 1.0.0
  */
 @Repository

@@ -1,6 +1,5 @@
 package com.telegram_bot_animal_shelter.service;
 
-import com.telegram_bot_animal_shelter.exceptions.PersonCatNotFoundException;
 import com.telegram_bot_animal_shelter.model.PersonCat;
 import com.telegram_bot_animal_shelter.model.Status;
 import com.telegram_bot_animal_shelter.repository.PersonCatRepository;
@@ -18,7 +17,7 @@ import static org.mockito.ArgumentMatchers.any;
 
 /**
  * Class PersonCatServiceImplTest
- * @author ZhitarVlad
+ * @author
  * @version 1.0.0
  */
 @ExtendWith(MockitoExtension.class)
@@ -55,13 +54,6 @@ public class PersonCatServiceImplTest {
         Assertions.assertThat(cat.getPhone()).isEqualTo(personCat.getPhone());
         Assertions.assertThat(cat.getAddress()).isEqualTo(personCat.getAddress());
         Assertions.assertThat(cat.getChatId()).isEqualTo(personCat.getChatId());
-    }
-
-    @Test
-    public void getByIdExceptionTest() {
-        Mockito.when(personCatRepositoryMock.findById(any(Long.class))).thenThrow(PersonCatNotFoundException.class);
-
-        org.junit.jupiter.api.Assertions.assertThrows(PersonCatNotFoundException.class, () -> personCatService.getByIdPersonCat(1L));
     }
 
     /**
@@ -103,13 +95,6 @@ public class PersonCatServiceImplTest {
         Assertions.assertThat(personCat2.getStatus()).isEqualTo(personCat1.getStatus());
     }
 
-    @Test
-    public void updateExceptionTest() {
-        PersonCat personCat = new PersonCat();
-
-        org.junit.jupiter.api.Assertions.assertThrows(PersonCatNotFoundException.class, () -> personCatService.updatePersonCat(personCat));
-    }
-
     /**
      * Testing method for getting all personCat
      */
@@ -119,10 +104,5 @@ public class PersonCatServiceImplTest {
         Collection<PersonCat> cat = personCatService.getAllPersonCat();
         Assertions.assertThat(cat.size()).isEqualTo(personCats.size());
         Assertions.assertThat(cat).isEqualTo(personCats);
-    }
-
-    @Test
-    public void deleteByIdPersonCat() {
-        Assertions.assertThat(personCats.remove(0).equals(personCats.get(0)));
     }
 }

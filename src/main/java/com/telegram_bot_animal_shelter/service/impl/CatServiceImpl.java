@@ -6,7 +6,7 @@ import java.util.Collection;
 
 /**
  * Interface CatServiceImpl
- * @author
+ * @author Zhitar Vlad
  * @version 1.0.0
  */
 public interface CatServiceImpl {

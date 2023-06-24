@@ -8,7 +8,7 @@ import java.util.Set;
 
 /**
  * Interface PersonCatRepository
- * @author
+ * @author Zhitar Vlad
  * @version 1.0.0
  */
 @Repository

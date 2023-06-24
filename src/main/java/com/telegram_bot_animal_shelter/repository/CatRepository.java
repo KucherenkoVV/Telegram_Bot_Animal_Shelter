@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 
 /**
  * Interface CatRepository
- * @author
+ * @author Zhitar Vlad
  * @version 1.0.0
  */
 @Repository

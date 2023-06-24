@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 
 /**
  * Interface DogRepository
- * @author
+ * @author Zhitar Vlad
  * @version 1.0.0
  */
 @Repository

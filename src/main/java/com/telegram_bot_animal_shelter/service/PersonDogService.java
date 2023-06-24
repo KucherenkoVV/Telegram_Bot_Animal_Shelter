@@ -12,7 +12,7 @@ import java.util.Collection;
 
 /**
  * Class PersonDogService
- * @author
+ * @author Zhitar Vlad
  * @version 1.0.0
  */
 @Service

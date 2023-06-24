@@ -8,7 +8,7 @@ import java.util.Date;
 
 /**
  * Interface ReportServiceImpl
- * @author
+ * @author Zhitar Vlad
  * @version 1.0.0
  */
 public interface ReportServiceImpl {

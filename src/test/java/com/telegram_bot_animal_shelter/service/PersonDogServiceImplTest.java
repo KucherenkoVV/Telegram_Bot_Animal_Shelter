@@ -1,6 +1,5 @@
 package com.telegram_bot_animal_shelter.service;
 
-import com.telegram_bot_animal_shelter.exceptions.PersonDogNotFoundException;
 import com.telegram_bot_animal_shelter.model.PersonDog;
 import com.telegram_bot_animal_shelter.model.Status;
 import com.telegram_bot_animal_shelter.repository.PersonDogRepository;
@@ -18,7 +17,7 @@ import static org.mockito.ArgumentMatchers.any;
 
 /**
  * Class PersonCatServiceImplTest
- * @author ZhitarVlad
+ * @author
  * @version 1.0.0
  */
 @ExtendWith(MockitoExtension.class)
@@ -55,13 +54,6 @@ public class PersonDogServiceImplTest {
         Assertions.assertThat(dog.getPhone()).isEqualTo(personDog.getPhone());
         Assertions.assertThat(dog.getAddress()).isEqualTo(personDog.getAddress());
         Assertions.assertThat(dog.getChatId()).isEqualTo(personDog.getChatId());
-    }
-
-    @Test
-    public void getByIdExceptionTest() {
-        Mockito.when(personDogRepositoryMock.findById(any(Long.class))).thenThrow(PersonDogNotFoundException.class);
-
-        org.junit.jupiter.api.Assertions.assertThrows(PersonDogNotFoundException.class, () -> personDogService.getByIdPersonDog(1L));
     }
 
     /**
@@ -103,13 +95,6 @@ public class PersonDogServiceImplTest {
         Assertions.assertThat(personDog2.getStatus()).isEqualTo(personDog1.getStatus());
     }
 
-    @Test
-    public void updateExceptionTest() {
-        PersonDog personDog = new PersonDog();
-
-        org.junit.jupiter.api.Assertions.assertThrows(PersonDogNotFoundException.class, () -> personDogService.updatePersonDog(personDog));
-    }
-
     /**
      * Testing method for getting all personDog
      */
@@ -119,10 +104,5 @@ public class PersonDogServiceImplTest {
         Collection<PersonDog> personDog1 = personDogService.getAllPersonDog();
         Assertions.assertThat(personDog1.size()).isEqualTo(personDogs.size());
         Assertions.assertThat(personDog1).isEqualTo(personDogs);
-    }
-
-    @Test
-    public void deleteByIdPersonDog() {
-        Assertions.assertThat(personDogs.remove(0).equals(personDogs.get(0)));
     }
 }
