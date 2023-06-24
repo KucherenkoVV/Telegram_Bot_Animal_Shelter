@@ -52,6 +52,6 @@ public class PersonDog extends Person{
     @JoinColumn(name = "dog_id", referencedColumnName = "id")
     private Dog dog;
 
-   @OneToMany(mappedBy = "PersonDog", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+   @OneToMany(mappedBy = "id", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
    private List<Report> reports;
 }
