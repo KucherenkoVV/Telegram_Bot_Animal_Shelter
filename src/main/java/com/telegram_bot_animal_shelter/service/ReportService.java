@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 
+import java.io.IOException;
 import java.util.Collection;
 import java.util.Date;
 
@@ -22,12 +23,12 @@ import java.util.Date;
 public class ReportService implements ReportServiceImpl {
 
     private final ReportRepository repository;
-
-    private static final Logger logger = LoggerFactory.getLogger(ReportService.class);
+    private static final Logger logger = LoggerFactory.getLogger(ReportServiceImpl.class);
 
     public ReportService(ReportRepository repository) {
         this.repository = repository;
     }
+
 
     /**
      * Method to upload reports
@@ -58,6 +59,35 @@ public class ReportService implements ReportServiceImpl {
         report.setRation(ration);
         report.setHealth(health);
         report.setHabits(habits);
+        this.repository.save(report);
+    }
+
+    /**
+     * Method to uploadReportData.
+     * @param personId
+     * @param pictureFile
+     * @param file
+     * @param caption
+     * @param filePath
+     * @param dateSendMessage
+     * @param timeDate
+     * @param daysOfReports
+     * @throws IOException
+     * @see ReportService
+     */
+    public void uploadReport(Long personId, byte[] pictureFile, File file,
+                             String caption, String filePath, Date dateSendMessage, Long timeDate, long daysOfReports)  {
+        logger.info("Was invoked method to uploadReportData");
+
+        Report report = new Report();//findById(personId);
+        report.setLastMessage(dateSendMessage);
+        report.setDays(daysOfReports);
+        report.setFilePath(filePath);
+        report.setChatId(personId);
+        report.setFileSize(file.fileSize());
+        report.setData(pictureFile);
+        report.setCaption(caption);
+        report.setLastMessageMs(timeDate);
         this.repository.save(report);
     }
 
