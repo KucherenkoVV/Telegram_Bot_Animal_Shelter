@@ -75,6 +75,7 @@ public class ReportService implements ReportServiceImpl {
      * @throws IOException
      * @see ReportService
      */
+    @Override
     public void uploadReport(Long personId, byte[] pictureFile, File file,
                              String caption, String filePath, Date dateSendMessage, Long timeDate, long daysOfReports)  {
         logger.info("Was invoked method to uploadReportData");

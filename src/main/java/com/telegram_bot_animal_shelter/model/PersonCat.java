@@ -1,6 +1,5 @@
 package com.telegram_bot_animal_shelter.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
@@ -52,7 +51,7 @@ public class PersonCat extends Person {
     @JoinColumn(name = "cat_id", referencedColumnName = "id")
     private Cat cat;
 
-    @OneToMany(mappedBy = "PersonCat", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    List<Report> reports;
+ //   @OneToMany(mappedBy = "PersonCat", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+ //   List<Report> reports;
 
 }

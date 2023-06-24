@@ -1,5 +1,6 @@
 package com.telegram_bot_animal_shelter.service;
 
+import com.telegram_bot_animal_shelter.exceptions.CatNotFoundException;
 import com.telegram_bot_animal_shelter.model.Cat;
 import com.telegram_bot_animal_shelter.repository.CatRepository;
 import org.assertj.core.api.Assertions;
@@ -16,15 +17,15 @@ import static org.mockito.ArgumentMatchers.any;
 
 /**
  * Class CatServiceImplTest
- * @author
+ * @author ZhitarVlad
  * @version 1.0.0
  */
 @ExtendWith(MockitoExtension.class)
 public class CatServiceImplTest {
 
-    private static final String NAME = "Барсик";
-    private static final String DESCRIPTION = "DESCRIPTION";
-    private static final String BREED = "Британский";
+    private static final java.lang.String NAME = "Барсик";
+    private static final java.lang.String DESCRIPTION = "DESCRIPTION";
+    private static final java.lang.String BREED = "Британский";
     private static final int AGE = Integer.parseInt("10");
 
     private static final List<Cat> cats = new ArrayList<>(Arrays.asList(
@@ -48,6 +49,13 @@ public class CatServiceImplTest {
         Assertions.assertThat(cat1.getBreed()).isEqualTo(cat.getBreed());
         Assertions.assertThat(cat1.getDescription()).isEqualTo(cat.getDescription());
         Assertions.assertThat(cat1.getAge()).isEqualTo(cat.getAge());
+    }
+
+    @Test
+    public void getByIdExceptionTest() {
+        Mockito.when(catRepositoryMock.findById(any(Long.class))).thenThrow(CatNotFoundException.class);
+
+        org.junit.jupiter.api.Assertions.assertThrows(CatNotFoundException.class, () -> catService.getByIdCat(1L));
     }
 
     /**
@@ -83,6 +91,13 @@ public class CatServiceImplTest {
         Assertions.assertThat(cat2.getAge()).isEqualTo(cat1.getAge());
     }
 
+    @Test
+    public void updateExceptionTest() {
+        Cat expected = new Cat();
+
+        org.junit.jupiter.api.Assertions.assertThrows(CatNotFoundException.class, () -> catService.updateCat(expected));
+    }
+
     /**
      * Testing method for getting all cats
      */
@@ -92,5 +107,10 @@ public class CatServiceImplTest {
         Collection<Cat> cat = catService.getAllCat();
         Assertions.assertThat(cat.size()).isEqualTo(cats.size());
         Assertions.assertThat(cat).isEqualTo(cats);
+    }
+
+    @Test
+    public void deleteByIdCat() {
+       Assertions.assertThat(cats.remove(0).equals(cats.get(0)));
     }
 }

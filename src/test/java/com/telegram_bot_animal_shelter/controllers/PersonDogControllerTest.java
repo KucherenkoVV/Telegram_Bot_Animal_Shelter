@@ -1,6 +1,5 @@
-package com.telegram_bot_animal_shelter.controller;
+package com.telegram_bot_animal_shelter.controllers;
 
-import com.telegram_bot_animal_shelter.controllers.PersonDogController;
 import com.telegram_bot_animal_shelter.model.PersonDog;
 import com.telegram_bot_animal_shelter.service.PersonDogService;
 import org.json.JSONObject;
@@ -17,6 +16,7 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
@@ -46,7 +46,7 @@ public class PersonDogControllerTest {
         mockMvc.perform(
                         get("/person-dog/{id}", 1L))
                 .andExpect(status().isOk())
-                .andReturn().getResponse().getContentAsString();
+                .andExpect(jsonPath("$.id").value(1));
 
         verify(personDogService).getByIdPersonDog(1L);
     }
@@ -70,7 +70,7 @@ public class PersonDogControllerTest {
                                 .content(userObject.toString())
                                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andReturn().getResponse().getContentAsString();
+                .andExpect(jsonPath("$.id").value(1));
 
         verify(personDogService).addPersonDog(personDog);
     }
@@ -94,7 +94,7 @@ public class PersonDogControllerTest {
                                 .content(userObject.toString())
                                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andReturn().getResponse().getContentAsString();
+                .andExpect(jsonPath("$.id").value(1));
 
         verify(personDogService).updatePersonDog(personDog);
     }

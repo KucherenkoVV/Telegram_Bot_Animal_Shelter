@@ -18,5 +18,5 @@ public interface CatServiceImpl {
 
     Collection<Cat> getAllCat();
 
-    void removeByIdCat(Long id);
+    String removeByIdCat(Long id);
 }

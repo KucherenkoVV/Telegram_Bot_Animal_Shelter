@@ -117,13 +117,13 @@ public class Report {
     @Column(name = "lastMessageMs", nullable = false)
     private Long lastMessageMs;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "personCat_id", referencedColumnName = "id")
-    private PersonCat personCat;
+   @ManyToOne(fetch = FetchType.LAZY)
+   @JoinColumn(name = "personCat_id", referencedColumnName = "id")
+   private PersonCat personCat;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "personDog_id", referencedColumnName = "id")
-    private PersonDog personDog;
+   @ManyToOne(fetch = FetchType.LAZY)
+   @JoinColumn(name = "personDog_id", referencedColumnName = "id")
+   private PersonDog personDog;
 
     public Report(Long chatId, String ration, String health, String habits, Long days, String caption) {
         this.chatId = chatId;

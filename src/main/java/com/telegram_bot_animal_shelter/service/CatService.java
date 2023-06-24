@@ -85,10 +85,12 @@ public class CatService implements CatServiceImpl {
      * Method for remove cats by id
      *
      * @param id
+     * @return
      */
     @Override
-    public void removeByIdCat(Long id) {
+    public String removeByIdCat(Long id) {
         logger.info("Was invoked method to remove a cat by id={}", id);
         this.repository.deleteById(id);
+        return "Кот успешно удален!";
     }
 }

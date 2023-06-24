@@ -16,6 +16,9 @@ public interface ReportServiceImpl {
     void uploadReport(Long personId, byte[] pictureFile, File file, String ration, String health,
                           String habits, String filePath, Date dateSendMessage, Long timeDate, long daysOfReports);
 
+    void uploadReport(Long personId, byte[] pictureFile, File file,
+                      String caption, String filePath, Date dateSendMessage, Long timeDate, long daysOfReports);
+
     Report getByIdReport(Long id);
 
     Collection<Report> getAllReport();

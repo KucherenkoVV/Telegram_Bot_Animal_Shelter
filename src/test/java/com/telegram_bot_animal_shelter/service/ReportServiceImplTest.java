@@ -1,5 +1,6 @@
 package com.telegram_bot_animal_shelter.service;
 
+import com.telegram_bot_animal_shelter.exceptions.ReportNotFoundException;
 import com.telegram_bot_animal_shelter.model.Report;
 import com.telegram_bot_animal_shelter.repository.ReportRepository;
 import org.assertj.core.api.Assertions;
@@ -16,7 +17,7 @@ import static org.mockito.ArgumentMatchers.any;
 
 /**
  * Class ReportServiceImplTest
- * @author
+ * @author ZhitarVlad
  * @version 1.0.0
  */
 @ExtendWith(MockitoExtension.class)
@@ -54,6 +55,13 @@ public class ReportServiceImplTest {
         Assertions.assertThat(report.getHabits()).isEqualTo(report.getHabits());
         Assertions.assertThat(report.getDays()).isEqualTo(report.getDays());
         Assertions.assertThat(report.getCaption()).isEqualTo(report.getCaption());
+    }
+
+    @Test
+    public void findByIdExceptionTest() {
+        Mockito.when(reportRepositoryMock.findById(any(Long.class))).thenThrow(ReportNotFoundException.class);
+
+        org.junit.jupiter.api.Assertions.assertThrows(ReportNotFoundException.class, () -> reportService.getByIdReport(1L));
     }
 
     /**
@@ -95,6 +103,13 @@ public class ReportServiceImplTest {
         Assertions.assertThat(report2.getCaption()).isEqualTo(report1.getCaption());
     }
 
+    @Test
+    public void updateExceptionTest() {
+        Report report = new Report();
+
+        org.junit.jupiter.api.Assertions.assertThrows(ReportNotFoundException.class, () -> reportService.updateReport(report));
+    }
+
     /**
      * Testing method for getting all reports
      */
@@ -106,5 +121,8 @@ public class ReportServiceImplTest {
         Assertions.assertThat(report).isEqualTo(reports);
     }
 
-
+    @Test
+    public void deleteByIdReport() {
+        Assertions.assertThat(reports.remove(0).equals(reports.get(0)));
+    }
 }
