@@ -1,7 +1,7 @@
 package com.telegram_bot_animal_shelter.controllers;
 
 import com.telegram_bot_animal_shelter.model.PersonCat;
-import com.telegram_bot_animal_shelter.service.impl.PersonCatServiceImpl;
+import com.telegram_bot_animal_shelter.service.impl.PersonCatService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -21,10 +21,10 @@ import java.util.Collection;
 @RequestMapping("person-cat")
 public class PersonCatController {
 
-    private final PersonCatServiceImpl personCatServiceImpl;
+    private final PersonCatService personCatService;
 
-    public PersonCatController(PersonCatServiceImpl personCatServiceImpl) {
-        this.personCatServiceImpl = personCatServiceImpl;
+    public PersonCatController(PersonCatService personCatService) {
+        this.personCatService = personCatService;
     }
 
     @Operation(summary = "Получение пользователя, усыновителя кота,  по id",
@@ -42,7 +42,7 @@ public class PersonCatController {
     )
     @GetMapping("/{id}")
     public PersonCat getById(@Parameter(description = "PersonCat id") @PathVariable Long id) {
-        return this.personCatServiceImpl.getByIdPersonCat(id);
+        return this.personCatService.getByIdPersonCat(id);
     }
 
     @Operation(summary = "Создание пользователя, усыновителя кота",
@@ -57,7 +57,7 @@ public class PersonCatController {
     )
     @PostMapping()
     public PersonCat save(@RequestBody PersonCat personCat) {
-        return this.personCatServiceImpl.addPersonCat(personCat);
+        return this.personCatService.addPersonCat(personCat);
     }
 
     @Operation(summary = "Изменение данных пользователя, усыновителя кота",
@@ -72,7 +72,7 @@ public class PersonCatController {
     )
     @PutMapping
     public PersonCat update(@RequestBody PersonCat personCat) {
-        return this.personCatServiceImpl.addPersonCat(personCat);
+        return this.personCatService.addPersonCat(personCat);
     }
 
     @Operation(summary = "Удаление пользователя, усыновителя кота, по id",
@@ -90,7 +90,7 @@ public class PersonCatController {
     )
     @DeleteMapping("/{id}")
     public void remove(@Parameter(description = "PersonCat id")@PathVariable Long id) {
-        this.personCatServiceImpl.removeByIdPersonCat(id);
+        this.personCatService.removeByIdPersonCat(id);
     }
 
     @Operation(summary = "Просмотр всех пользователей, усыновителей кота",
@@ -108,6 +108,6 @@ public class PersonCatController {
     )
     @GetMapping("/all")
     public Collection<PersonCat> getAll() {
-        return this.personCatServiceImpl.getAllPersonCat();
+        return this.personCatService.getAllPersonCat();
     }
 }

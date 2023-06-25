@@ -1,7 +1,6 @@
 package com.telegram_bot_animal_shelter.controllers;
 
 import com.telegram_bot_animal_shelter.model.Cat;
-import com.telegram_bot_animal_shelter.service.impl.CatServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -22,10 +21,10 @@ import java.util.Collection;
 @RequestMapping("cat")
 public class CatController {
 
-    private final CatServiceImpl catServiceImpl;
+    private final CatService catService;
 
-    public CatController(CatServiceImpl catServiceImpl) {
-        this.catServiceImpl = catServiceImpl;
+    public CatController(CatService catService) {
+        this.catService = catService;
     }
 
     @Operation(summary = "Получение кота по id",
@@ -43,7 +42,7 @@ public class CatController {
     )
     @GetMapping("/{id}")
     public Cat getById(@Parameter(description = "cat id") @PathVariable Long id) {
-        return this.catServiceImpl.getByIdCat(id);
+        return this.catService.getByIdCat(id);
     }
 
     @Operation(summary = "Создание нового кота",
@@ -58,7 +57,7 @@ public class CatController {
     )
     @PostMapping()
     public Cat save(@RequestBody Cat cat) {
-        return this.catServiceImpl.addCat(cat);
+        return this.catService.addCat(cat);
     }
 
     @Operation(summary = "Редактирование данных кота",
@@ -73,7 +72,7 @@ public class CatController {
     )
     @PutMapping()
     public Cat update(@RequestBody Cat cat) {
-        return this.catServiceImpl.updateCat(cat);
+        return this.catService.updateCat(cat);
     }
 
     @Operation(summary = "Удаление кота по id",
@@ -91,7 +90,7 @@ public class CatController {
     )
     @DeleteMapping("/{id}")
     public void remove(@Parameter(description = "cat id") @PathVariable Long id) {
-        this.catServiceImpl.removeByIdCat(id);
+        this.catService.removeByIdCat(id);
     }
 
     @Operation(summary = "Получение всех котов",
@@ -109,6 +108,6 @@ public class CatController {
     )
     @GetMapping("/all")
     public Collection<Cat> getAll() {
-        return this.catServiceImpl.getAllCat();
+        return this.catService.getAllCat();
     }
 }

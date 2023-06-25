@@ -2,6 +2,8 @@ package com.telegram_bot_animal_shelter.model;
 
 import lombok.*;
 
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.MappedSuperclass;
 
 @Getter
@@ -47,6 +49,7 @@ public abstract class Person {
      * @see Status
      * @param status
      */
+    @Enumerated(EnumType.STRING)
     private Status status;
 
     public Person(String name, int yearOfBirth, String phone, String address, Long chatId, Status status) {

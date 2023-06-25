@@ -1,7 +1,7 @@
 package com.telegram_bot_animal_shelter.controllers;
 
 import com.telegram_bot_animal_shelter.model.Dog;
-import com.telegram_bot_animal_shelter.service.impl.DogServiceImpl;
+import com.telegram_bot_animal_shelter.service.impl.DogService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -21,10 +21,10 @@ import java.util.Collection;
 @RequestMapping("dog")
 public class DogController {
 
-    private final DogServiceImpl dogServiceImpl;
+    private final DogService dogService;
 
-    public DogController(DogServiceImpl dogServiceImpl) {
-        this.dogServiceImpl = dogServiceImpl;
+    public DogController(DogService dogService) {
+        this.dogService = dogService;
     }
 
     @Operation(summary = "Получение собаки по id",
@@ -42,7 +42,7 @@ public class DogController {
     )
     @GetMapping("/{id}")
     public Dog getById(@Parameter(description = "dog id") @PathVariable Long id) {
-        return this.dogServiceImpl.getByIdDog(id);
+        return this.dogService.getByIdDog(id);
     }
 
     @Operation(summary = "Создание новой собаки",
@@ -57,7 +57,7 @@ public class DogController {
     )
     @PostMapping()
     public Dog save(@RequestBody Dog dog) {
-        return this.dogServiceImpl.addDog(dog);
+        return this.dogService.addDog(dog);
     }
 
     @Operation(summary = "Редактирование данных собаки",
@@ -72,7 +72,7 @@ public class DogController {
     )
     @PutMapping()
     public Dog update(@RequestBody Dog dog) {
-        return this.dogServiceImpl.updateDog(dog);
+        return this.dogService.updateDog(dog);
     }
 
     @Operation(summary = "Удаление собаки по id",
@@ -90,7 +90,7 @@ public class DogController {
     )
     @DeleteMapping("/{id}")
     public void remove(@Parameter (description = "dog id")@PathVariable Long id) {
-        this.dogServiceImpl.removeByIdDog(id);
+        this.dogService.removeByIdDog(id);
     }
 
     @Operation(summary = "Просмотр всех собак",
@@ -108,7 +108,7 @@ public class DogController {
     )
     @GetMapping("/all")
     public Collection<Dog> getAll() {
-        return this.dogServiceImpl.getAllDog();
+        return this.dogService.getAllDog();
     }
 }
 
