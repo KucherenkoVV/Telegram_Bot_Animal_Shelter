@@ -2,7 +2,7 @@ package com.telegram_bot_animal_shelter.controllers;
 
 import com.telegram_bot_animal_shelter.listener.TelegramBotUpdateListener;
 import com.telegram_bot_animal_shelter.model.Report;
-import com.telegram_bot_animal_shelter.service.impl.ReportServiceImpl;
+import com.telegram_bot_animal_shelter.service.impl.ReportService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -27,14 +27,20 @@ import java.util.Collection;
 @RequestMapping("photoReports")
 public class ReportController {
 
-    private final ReportServiceImpl reportServiceImpl;
-    @Autowired
-    private TelegramBotUpdateListener telegramBotUpdateListener;
+    private final ReportService reportService;
+
+    private TelegramBotUpdateListener telegramBot;
 
     private final String fileType = "image/jpeg";
 
-    public ReportController(ReportServiceImpl reportServiceImpl) {
-        this.reportServiceImpl = reportServiceImpl;
+    public ReportController(ReportService reportService) {
+        this.reportService = reportService;
+    }
+
+    @Autowired
+    public ReportController(ReportService reportService, TelegramBotUpdateListener telegramBot) {
+        this.reportService = reportService;
+        this.telegramBot = telegramBot;
     }
 
     @Operation(summary = "Просмотр отчетов по id",
@@ -52,7 +58,7 @@ public class ReportController {
     )
     @GetMapping("/{id}/report")
     public Report downloadReport(@Parameter(description = "report id") @PathVariable Long id) {
-        return this.reportServiceImpl.getByIdReport(id);
+        return this.reportService.getByIdReport(id);
     }
 
     @Operation(summary = "Удаление отчетов по id",
@@ -70,7 +76,7 @@ public class ReportController {
     )
     @DeleteMapping("/{id}")
     public void remove(@Parameter (description = "report id") @PathVariable Long id) {
-        this.reportServiceImpl.removeByIdReport(id);
+        this.reportService.removeByIdReport(id);
     }
 
     @Operation(summary = "Просмотр всех отчетов",
@@ -88,7 +94,7 @@ public class ReportController {
     )
     @GetMapping("/getAll")
     public ResponseEntity<Collection<Report>> getAll() {
-        return ResponseEntity.ok(this.reportServiceImpl.getAllReport());
+        return ResponseEntity.ok(this.reportService.getAllReport());
     }
 
     @Operation(summary = "Просмотр фото по id отчета",
@@ -99,7 +105,7 @@ public class ReportController {
     )
     @GetMapping("/{id}/photo-from-db")
     public ResponseEntity<byte[]> downloadPhotoFromDB(@Parameter (description = "report id") @PathVariable Long id) {
-        Report reportData = this.reportServiceImpl.getByIdReport(id);
+        Report reportData = this.reportService.getByIdReport(id);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.parseMediaType(fileType));
@@ -127,7 +133,7 @@ public class ReportController {
                                     @RequestParam Long chat_Id,
                                     @Parameter(description = "Ваше сообщение")
                                     @RequestParam String message) {
-        telegramBotUpdateListener.sendMessage(chat_Id, message);
+        telegramBot.sendMessage(chat_Id, message);
     }
 }
 

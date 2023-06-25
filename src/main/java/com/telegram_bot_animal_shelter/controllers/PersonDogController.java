@@ -1,7 +1,7 @@
 package com.telegram_bot_animal_shelter.controllers;
 
 import com.telegram_bot_animal_shelter.model.PersonDog;
-import com.telegram_bot_animal_shelter.service.impl.PersonDogServiceImpl;
+import com.telegram_bot_animal_shelter.service.impl.PersonDogService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -21,10 +21,10 @@ import java.util.Collection;
 @RequestMapping("person-dog")
 public class PersonDogController {
 
-    private final PersonDogServiceImpl personDogServiceImpl;
+    private final PersonDogService personDogService;
 
-    public PersonDogController(PersonDogServiceImpl personDogServiceImpl) {
-        this.personDogServiceImpl = personDogServiceImpl;
+    public PersonDogController(PersonDogService personDogService) {
+        this.personDogService = personDogService;
     }
 
     @Operation(summary = "Получение пользователя, усыновителя собаки,  по id",
@@ -42,7 +42,7 @@ public class PersonDogController {
     )
     @GetMapping("/{id}")
     public PersonDog getById(@Parameter(description = "PersonDog id")@PathVariable Long id) {
-        return this.personDogServiceImpl.getByIdPersonDog(id);
+        return this.personDogService.getByIdPersonDog(id);
     }
 
     @Operation(summary = "Создание пользователя, усыновителя собаки",
@@ -57,7 +57,7 @@ public class PersonDogController {
     )
     @PostMapping
     public PersonDog save(@RequestBody PersonDog personDog) {
-        return this.personDogServiceImpl.addPersonDog(personDog);
+        return this.personDogService.addPersonDog(personDog);
     }
 
     @Operation(summary = "Изменение данных пользователя, усыновителя кота",
@@ -72,7 +72,7 @@ public class PersonDogController {
     )
     @PutMapping
     public PersonDog update(@RequestBody PersonDog personDog) {
-        return this.personDogServiceImpl.updatePersonDog(personDog);
+        return this.personDogService.updatePersonDog(personDog);
     }
 
     @Operation(summary = "Удаление пользователей по id",
@@ -90,7 +90,7 @@ public class PersonDogController {
     )
     @DeleteMapping("/{id}")
     public void remove(@Parameter(description = "PersonDog id") @PathVariable Long id) {
-        this.personDogServiceImpl.removeByIdPersonDog(id);
+        this.personDogService.removeByIdPersonDog(id);
     }
 
     @Operation(summary = "Просмотр всех пользователей",
@@ -108,6 +108,6 @@ public class PersonDogController {
     )
     @GetMapping("/all")
     public Collection<PersonDog> getAll() {
-            return this.personDogServiceImpl.getAllPersonDog();
+            return this.personDogService.getAllPersonDog();
     }
 }

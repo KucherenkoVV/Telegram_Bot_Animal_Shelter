@@ -3,7 +3,6 @@ package com.telegram_bot_animal_shelter.service.impl;
 import com.telegram_bot_animal_shelter.exceptions.PersonDogNotFoundException;
 import com.telegram_bot_animal_shelter.model.PersonDog;
 import com.telegram_bot_animal_shelter.repository.PersonDogRepository;
-import com.telegram_bot_animal_shelter.service.PersonDogService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -16,13 +15,13 @@ import java.util.Collection;
  * @version 1.0.0
  */
 @Service
-public class PersonDogServiceImpl implements PersonDogService {
+public class PersonDogService implements com.telegram_bot_animal_shelter.service.PersonDogService {
 
     private final PersonDogRepository repository;
 
-    private static final Logger logger = LoggerFactory.getLogger(PersonDogServiceImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(PersonDogService.class);
 
-    public PersonDogServiceImpl(PersonDogRepository repository) {
+    public PersonDogService(PersonDogRepository repository) {
         this.repository = repository;
     }
 

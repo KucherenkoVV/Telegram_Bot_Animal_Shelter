@@ -10,6 +10,7 @@ import com.pengrad.telegrambot.request.ForwardMessage;
 import com.pengrad.telegrambot.request.GetFile;
 import com.pengrad.telegrambot.request.SendMessage;
 import com.pengrad.telegrambot.response.GetFileResponse;
+import com.telegram_bot_animal_shelter.exceptions.MenuDoesntWorkException;
 import com.telegram_bot_animal_shelter.keyboard.KeyBoardShelter;
 import com.telegram_bot_animal_shelter.model.PersonCat;
 import com.telegram_bot_animal_shelter.model.PersonDog;
@@ -44,21 +45,40 @@ public class TelegramBotUpdateListener implements UpdatesListener {
 
     private static final Logger logger = LoggerFactory.getLogger(TelegramBotUpdateListener.class);
 
-    private long daysOfReports;
-    @Autowired
     private ReportRepository reportRepository;
-    @Autowired
-    private PersonDogRepository personDogRepository;
-    @Autowired
-    private PersonCatRepository personCatRepository;
-    @Autowired
-    private KeyBoardShelter keyBoardShelter;
-    @Autowired
-    private ReportService reportService;
-    @Autowired
-    private TelegramBot telegramBot;
 
-    public TelegramBotUpdateListener(TelegramBot telegramBot) {
+    private PersonDogRepository personDogRepository;
+
+    private PersonCatRepository personCatRepository;
+
+    private KeyBoardShelter keyBoardShelter;
+
+    private ReportService reportService;
+
+    private com.pengrad.telegrambot.TelegramBot telegramBot;
+
+    private Report report = new Report();
+
+    private PersonCat personCat = new PersonCat();
+
+    private PersonDog personDog = new PersonDog();
+
+    Pattern pattern = Pattern.compile(REGEX_MESSAGE);
+
+    @Autowired
+    public TelegramBotUpdateListener(ReportRepository reportRepository, PersonDogRepository personDogRepository,
+                                     PersonCatRepository personCatRepository, KeyBoardShelter keyBoardShelter,
+                                     ReportService reportService, TelegramBot telegramBot) {
+        this.reportRepository = reportRepository;
+        this.personDogRepository = personDogRepository;
+        this.personCatRepository = personCatRepository;
+        this.keyBoardShelter = keyBoardShelter;
+        this.reportService = reportService;
+        this.telegramBot = telegramBot;
+    }
+
+
+    public TelegramBotUpdateListener(com.pengrad.telegrambot.TelegramBot telegramBot) {
         this.telegramBot = telegramBot;
     }
 
@@ -67,11 +87,11 @@ public class TelegramBotUpdateListener implements UpdatesListener {
         telegramBot.setUpdatesListener(this);
     }
 
-    private boolean isCat = false;
 
     /**
      * A method that allows you to track and organize the entire process of communication with the user.
      * Choose menu from switch-case after phrase from keyboard button.
+     *
      * @param updates
      */
     @Override
@@ -80,15 +100,12 @@ public class TelegramBotUpdateListener implements UpdatesListener {
         updates.forEach(update -> {
             logger.info("Processing update: {}", update);
 
-
             String nameUser = update.message().chat().firstName();
             String textUpdate = update.message().text();
             Integer messageId = update.message().messageId();
             Long chatId = update.message().chat().id();
             Calendar calendar = new GregorianCalendar();
-            daysOfReports = reportRepository.findAll().stream()
-                    .filter(s -> Objects.equals(s.getChatId(), chatId))
-                    .count() + 1;
+
 
             checkReportDays(update, chatId, calendar);
 
@@ -105,110 +122,110 @@ public class TelegramBotUpdateListener implements UpdatesListener {
                             keyBoardShelter.chooseMenu(chatId);
                             break;
 
-                        case "Кошка":
-                            isCat = true;
+                        case CAT:
+                            personCat.setChooseCat(true);
+                            personDog.setChooseDog(false);
                             keyBoardShelter.sendMenu(chatId);
-                            sendMessage(chatId, "Вы выбрали кошачий приют.");
+                            sendMessage(chatId, SET_CAT_ANIMAL);
                             break;
 
-                        case "Собака":
-                            isCat = false;
+                        case DOG:
+                            personDog.setChooseDog(true);
+                            personCat.setChooseCat(false);
                             keyBoardShelter.sendMenu(chatId);
-                            sendMessage(chatId, "Вы выбрали собачий приют.");
+                            sendMessage(chatId, SET_DOG_ANIMAL);
                             break;
 
-                        case "Главное меню":
-                        case "Вернуться в меню":
+                        case MAIN_MENU:
+                        case RETURN_MENU:
                             keyBoardShelter.sendMenu(chatId);
                             break;
 
-                        case "Вернуться к выбору приюта":
+                        case RETURN_TO_SHELTER_CHOOSE_MENU:
                             keyBoardShelter.chooseMenu(chatId);
                             break;
 
-                        case "Схема проезда, пропуск":
+                        case DRIVER_SCHEME:
                             sendMessage(chatId, SCHEMA_2GIS);
                             break;
 
-                        case "Техника безопасности":
+                        case FOR_SAFETY:
                             sendMessage(chatId, SAFETY);
                             break;
 
 
-                        case "Информация о приюте":
+                        case SHELTER_INFO_MENU:
                             keyBoardShelter.sendMenuInfoShelter(chatId);
                             break;
 
-                        case "О приюте":
-                            if (isCat) {
+                        case ABOUT_ANIMAL_SHELTER:
+                            if (personCat.isChooseCat()) {
                                 sendMessage(chatId, INFO_ABOUT_SHELTER_CAT);
-                            } else {
+                            } else if (personDog.isChooseDog()) {
                                 sendMessage(chatId, INFO_ABOUT_SHELTER_DOG);
                             }
                             break;
 
-                        case "Советы и рекомендации":
-                            if (isCat) {
+                        case TIPS_AND_RECOMMENDATIONS:
+                            if (personCat.isChooseCat()) {
                                 sendMessage(chatId, INFO_ABOUT_CATS);
-                            } else {
+                            } else if (personDog.isChooseDog()) {
                                 sendMessage(chatId, INFO_ABOUT_DOGS);
                             }
                             break;
 
-                        case "Необходимые документы":
+                        case DOCUMENTS:
                             sendMessage(chatId, INFO_ABOUT_DOCUMENTS);
                             break;
 
-                        case "Взять питомца с ограниченными возможностями":
+                        case GET_ANIMAL_WITH_DEFECTS:
                             sendMessage(chatId, INFO_ABOUT_ANIMAL_WITH_DEFECTS);
                             break;
 
-                        case "Прислать отчет о питомце":
+                        case SEND_REPORT:
                             sendMessage(chatId, INFO_ABOUT_REPORT);
                             sendMessage(chatId, REPORT_EXAMPLE);
                             getReport(update);
 
-                            //присылает хрень
-                        case "Как взять питомца из приюта":
+                        case HOW_GET_ANIMAL:
                             keyBoardShelter.sendMenuTakeAnimal(chatId);
                             break;
 
-                        case "Информация о возможностях бота":
+                        case INFO_ABOUT_BOT_BUTTON:
                             sendMessage(chatId, INFO_ABOUT_BOT);
                             break;
 
-                        case "Оставить контактные данные":
+                        case GET_USER_CONTACT:
                             new ReplyKeyboardMarkup(new KeyboardButton(" ")
-                                            .requestContact(true));
-                                shareContact(update);
+                                    .requestContact(true));
+                            shareContact(update);
                             break;
 
-                        case "Обратиться к волонтеру":
+                        case SEND_MESSAGE_VOLUNTEER:
                             try {
-                                URL url = new URL("https://t.me/mr_Talks");
-                                sendMessage(chatId, "Чтобы задать свой вопрос волонтеру, перейдите по ссылке:  " + url);
+                                URL url = new URL(VOLUNTEER_URL);
+                                sendMessage(chatId, VOLUNTEER_QUESTION + url);
                             } catch (MalformedURLException e) {
                                 throw new RuntimeException(e);
                             }
                             break;
 
-                        case "":
-                            System.out.println("Измените свой вопрос");
-                            sendMessage(chatId, "Пустое сообщение");
+                        case EMPTY:
+                            sendMessage(chatId, EMPTY_MESSAGE);
                             break;
 
-                        case "Привет":
-                        case "привет":
+                        case SAY_HI:
+                        case SAY_HI2:
                             sendMessage(chatId, "И тебе привет, " + nameUser + ". Возьми питомца из приюта.");
 
                         default:
-                            sendReplyMessage(chatId, "Я не знаю такой команды, возможно вам стоит обратиться к волонтеру", messageId);
+                            sendReplyMessage(chatId, UNKNOWN_MESSAGE, messageId);
                             break;
 
                     }
                 }
-            } catch (NullPointerException e) {
-                System.out.println("Ошибка");
+            } catch (MenuDoesntWorkException e) {
+                e.printStackTrace();
             }
 
         });
@@ -218,6 +235,9 @@ public class TelegramBotUpdateListener implements UpdatesListener {
 
     private void checkReportDays(Update update, long chatId, Calendar calendar) {
         long compareTime = calendar.get(Calendar.DAY_OF_MONTH);
+        report.setDays(reportRepository.findAll().stream()
+                .filter(s -> Objects.equals(s.getChatId(), chatId))
+                .count() + 1);
 
         Long lastMessageTime = reportRepository.findAll().stream()
                 .filter(s -> s.getChatId() == chatId)
@@ -228,18 +248,18 @@ public class TelegramBotUpdateListener implements UpdatesListener {
             Date lastDateSendMessage = new Date(lastMessageTime * 1000);
             long numberOfDay = lastDateSendMessage.getDate();
 
-            if (daysOfReports < 30) {
+            if (report.getDays() < 30) {
                 if (compareTime != numberOfDay) {
                     if (update.message() != null && update.message().photo() != null && update.message().caption() != null) {
                         getReport(update);
                     }
                 } else {
                     if (update.message() != null && update.message().photo() != null && update.message().caption() != null) {
-                        sendMessage(chatId, "Вы уже отправляли отчет сегодня");
+                        sendMessage(chatId, ALREADY_SEND_REPORT);
                     }
                 }
-                if (daysOfReports >= 30) {
-                    sendMessage(chatId, "Вы прошли испытательный срок!");
+                if (report.getDays() >= 30) {
+                    sendMessage(chatId, TRIAL_PERIOD_PASSED);
                 }
             }
         } else {
@@ -248,7 +268,7 @@ public class TelegramBotUpdateListener implements UpdatesListener {
             }
         }
         if (update.message() != null && update.message().photo() != null && update.message().caption() == null) {
-            sendMessage(chatId, "Некорректно заполнен отчет.");
+            sendMessage(chatId, INCORRECT_REPORT);
         }
 
     }
@@ -291,6 +311,7 @@ public class TelegramBotUpdateListener implements UpdatesListener {
     /**
      * A method for sharing a contact.
      * What doing: Get contact from Users in TelegramBot and write information in local variables and DB
+     *
      * @param update
      */
     public void shareContact(Update update) {
@@ -306,27 +327,27 @@ public class TelegramBotUpdateListener implements UpdatesListener {
                     .filter(i -> i.getChatId() == finalChatId).toList();
 
             if (!sortChatId.isEmpty() || !sortChatIdCat.isEmpty()) {
-                sendMessage(finalChatId, "Вы уже в базе!");
+                sendMessage(finalChatId, ALREADY_IN_DB);
                 return;
             }
             if (lastName != null) {
                 String name = firstName + " " + lastName + " " + username;
-                if (isCat) {
+                if (personCat.isChooseCat()) {
                     personCatRepository.save(new PersonCat(name, phone, finalChatId));
-                } else {
+                } else if (personDog.isChooseDog()) {
                     personDogRepository.save(new PersonDog(name, phone, finalChatId));
                 }
-                sendMessage(finalChatId, "Вас успешно добавили в базу. Скоро вам перезвонят.");
+                sendMessage(finalChatId, ADD_TO_DB);
                 return;
             }
-            if (isCat) {
+            if (personCat.isChooseCat()) {
                 personCatRepository.save(new PersonCat(firstName, phone, finalChatId));
-            } else {
+            } else if (personDog.isChooseDog()) {
                 personDogRepository.save(new PersonDog(firstName, phone, finalChatId));
             }
-            sendMessage(finalChatId, "Вас успешно добавили в базу! Скоро вам перезвонят.");
+            sendMessage(finalChatId, ADD_TO_DB);
 
-            sendMessage(telegramChatVolunteers, phone + " " + firstName + " Добавил(а) свой номер в базу");
+            sendMessage(telegramChatVolunteers, phone + " " + firstName + USER_ADDED_PHONE_NUMBER_TO_DB);
             sendForwardMessage(finalChatId, update.message().messageId());
         }
     }
@@ -334,10 +355,10 @@ public class TelegramBotUpdateListener implements UpdatesListener {
     /**
      * A method that allows you to receive reports.
      * What doing: send information about received a report by bot
+     *
      * @param update
      */
     public void getReport(Update update) {
-        Pattern pattern = Pattern.compile(REGEX_MESSAGE);
         Matcher matcher = pattern.matcher(update.message().caption());
         if (matcher.matches()) {
             String ration = matcher.group(3);
@@ -355,32 +376,31 @@ public class TelegramBotUpdateListener implements UpdatesListener {
                 Date dateSendMessage = new Date(timeDate * 1000);
                 byte[] fileContent = telegramBot.getFileContent(file);
                 reportService.uploadReport(update.message().chat().id(), fileContent, file,
-                        ration, health, habits, fullPathPhoto, dateSendMessage, timeDate, daysOfReports);
+                        ration, health, habits, fullPathPhoto, dateSendMessage, timeDate, report.getDays());
 
-                telegramBot.execute(new SendMessage(update.message().chat().id(), "Отчет успешно принят!"));
+                telegramBot.execute(new SendMessage(update.message().chat().id(), REPORT_IS_OK));
 
-                System.out.println("Отчет успешно принят от: " + update.message().chat().id());
+                logger.info(REPORT_RECEIVED + update.message().chat().id());
             } catch (IOException e) {
-                System.out.println("Ошибка загрузки фото!");
+                System.out.println(UPLOAD_PHOTO_ERROR);
             }
         } else {
             GetFile getFileRequest = new GetFile(update.message().photo()[1].fileId());
             GetFileResponse getFileResponse = telegramBot.execute(getFileRequest);
             try {
                 File file = getFileResponse.file();
-                file.fileSize();
                 String fullPathPhoto = file.filePath();
 
                 long timeDate = update.message().date();
                 Date dateSendMessage = new Date(timeDate * 1000);
                 byte[] fileContent = telegramBot.getFileContent(file);
                 reportService.uploadReport(update.message().chat().id(), fileContent, file, update.message().caption(),
-                        fullPathPhoto, dateSendMessage, timeDate, daysOfReports);
+                        fullPathPhoto, dateSendMessage, timeDate, report.getDays());
 
-                telegramBot.execute(new SendMessage(update.message().chat().id(), "Отчет успешно принят!"));
-                System.out.println("Отчет успешно принят от: " + update.message().chat().id());
+                telegramBot.execute(new SendMessage(update.message().chat().id(), REPORT_IS_OK));
+                logger.info(REPORT_RECEIVED + update.message().chat().id());
             } catch (IOException e) {
-                System.out.println("Ошибка загрузки фото!");
+                System.out.println(UPLOAD_PHOTO_ERROR);
             }
         }
     }
@@ -388,11 +408,12 @@ public class TelegramBotUpdateListener implements UpdatesListener {
     /**
      * A method that allows you to track the sending of reports.
      * What doing: check how many days user was sent correct report
+     *
      * @see TelegramBotUpdateListener
      */
     @Scheduled(cron = "* 30 21 * * *")
     public void checkResults() {
-        if (daysOfReports < 30) {
+        if (report.getDays() < 30) {
             var twoDay = 172800000;
             var nowTime = new Date().getTime() - twoDay;
             var getDistinct = this.reportRepository.findAll().stream()
@@ -402,7 +423,7 @@ public class TelegramBotUpdateListener implements UpdatesListener {
                             .comparing(Report::getLastMessageMs));
             getDistinct.stream()
                     .filter(i -> i.getLastMessageMs() * 1000 < nowTime)
-                    .forEach(s -> sendMessage(s.getChatId(), "Вы забыли прислать отчет, скорее поторопитесь сделать это!"));
+                    .forEach(s -> sendMessage(s.getChatId(), REPORT_NOTIFICATION));
         }
     }
 }

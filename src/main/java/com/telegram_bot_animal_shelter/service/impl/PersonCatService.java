@@ -3,7 +3,6 @@ package com.telegram_bot_animal_shelter.service.impl;
 import com.telegram_bot_animal_shelter.exceptions.PersonCatNotFoundException;
 import com.telegram_bot_animal_shelter.model.PersonCat;
 import com.telegram_bot_animal_shelter.repository.PersonCatRepository;
-import com.telegram_bot_animal_shelter.service.PersonCatService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -16,13 +15,13 @@ import java.util.Collection;
  * @version 1.0.0
  */
 @Service
-public class PersonCatServiceImpl implements PersonCatService {
+public class PersonCatService implements com.telegram_bot_animal_shelter.service.PersonCatService {
 
     private final PersonCatRepository repository;
 
-    private static final Logger logger = LoggerFactory.getLogger(PersonCatServiceImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(PersonCatService.class);
 
-    public PersonCatServiceImpl(PersonCatRepository personCatRepository) {
+    public PersonCatService(PersonCatRepository personCatRepository) {
         this.repository = personCatRepository;
     }
 

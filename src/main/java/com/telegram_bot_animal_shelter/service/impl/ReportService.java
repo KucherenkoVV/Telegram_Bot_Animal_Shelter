@@ -4,7 +4,6 @@ import com.pengrad.telegrambot.model.File;
 import com.telegram_bot_animal_shelter.exceptions.ReportNotFoundException;
 import com.telegram_bot_animal_shelter.model.Report;
 import com.telegram_bot_animal_shelter.repository.ReportRepository;
-import com.telegram_bot_animal_shelter.service.ReportService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -20,13 +19,13 @@ import java.util.Date;
  * @version 1.0.0
  */
 @Service
-public class ReportServiceImpl implements ReportService {
+public class ReportService implements com.telegram_bot_animal_shelter.service.ReportService {
 
     private final ReportRepository repository;
 
-    private static final Logger logger = LoggerFactory.getLogger(ReportServiceImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(ReportService.class);
 
-    public ReportServiceImpl(ReportRepository repository) {
+    public ReportService(ReportRepository repository) {
         this.repository = repository;
     }
 
@@ -73,7 +72,7 @@ public class ReportServiceImpl implements ReportService {
      * @param timeDate
      * @param daysOfReports
      * @throws IOException
-     * @see ReportService
+     * @see com.telegram_bot_animal_shelter.service.ReportService
      */
     public void uploadReport(Long personId, byte[] pictureFile, File file,
                                  String caption, String filePath, Date dateSendMessage, Long timeDate, long daysOfReports)  {
