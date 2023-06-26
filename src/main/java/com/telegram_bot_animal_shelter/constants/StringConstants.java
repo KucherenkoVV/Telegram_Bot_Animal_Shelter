@@ -1,5 +1,10 @@
 package com.telegram_bot_animal_shelter.constants;
 
+/**
+ * Class StringConstants
+ * @author Kucherenko V.V
+ * @version 1.0.0
+ */
 public abstract class StringConstants {
     public static final String START = "/start";
 
