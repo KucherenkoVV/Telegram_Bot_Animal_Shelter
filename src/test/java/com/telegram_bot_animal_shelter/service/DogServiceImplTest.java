@@ -1,5 +1,6 @@
 package com.telegram_bot_animal_shelter.service;
 
+import com.telegram_bot_animal_shelter.exceptions.DogNotFoundException;
 import com.telegram_bot_animal_shelter.model.Dog;
 import com.telegram_bot_animal_shelter.repository.DogRepository;
 import org.assertj.core.api.Assertions;
@@ -13,10 +14,13 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.*;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 /**
  * Class DogServiceImplTest
- * @author
+ * @author Zhitar Vladislav
  * @version 1.0.0
  */
 @ExtendWith(MockitoExtension.class)
@@ -48,6 +52,16 @@ public class DogServiceImplTest {
         Assertions.assertThat(dog1.getBreed()).isEqualTo(dog.getBreed());
         Assertions.assertThat(dog1.getDescription()).isEqualTo(dog.getDescription());
         Assertions.assertThat(dog1.getAge()).isEqualTo(dog.getAge());
+    }
+
+    /**
+     * Error Throwing test
+     */
+    @Test
+    public void getByIdExceptionTest() {
+        Mockito.when(dogRepositoryMock.findById(1L)).thenThrow(DogNotFoundException.class);
+
+        org.junit.jupiter.api.Assertions.assertThrows(DogNotFoundException.class, () -> dogService.getByIdDog(1L));
     }
 
     /**
@@ -84,6 +98,16 @@ public class DogServiceImplTest {
     }
 
     /**
+     * Error Throwing test
+     */
+    @Test
+    public void updateExceptionTest() {
+        Dog expected = new Dog();
+
+        org.junit.jupiter.api.Assertions.assertThrows(DogNotFoundException.class, () -> dogService.updateDog(expected));
+    }
+
+    /**
      * Testing method for getting all dogs
      */
     @Test
@@ -92,5 +116,16 @@ public class DogServiceImplTest {
         Collection<Dog> dog = dogService.getAllDog();
         Assertions.assertThat(dog.size()).isEqualTo(dogs.size());
         Assertions.assertThat(dog).isEqualTo(dogs);
+    }
+
+    /**
+     * Testing method for removeById
+     */
+    @Test
+    public void removeByIdDog() {
+        Long dogID = 1L;
+        dogService.removeByIdDog(dogID);
+        verify(dogRepositoryMock, times(1)).deleteById(eq(dogID));
+
     }
 }

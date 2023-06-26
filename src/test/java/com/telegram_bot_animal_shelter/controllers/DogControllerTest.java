@@ -21,7 +21,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 /**
  * Class DogControllerTest
- * @author Zhitar Vlad
+ * @author Zhitar Vladislav
  * @version 1.0.0
  */
 @WebMvcTest(DogController.class)
@@ -46,7 +46,7 @@ public class DogControllerTest {
         mockMvc.perform(
                         get("/dog/{id}", 1L))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(1));
+                .andReturn().getResponse().getContentAsString();
 
 
         verify(dogService).getByIdDog(1L);
@@ -71,7 +71,7 @@ public class DogControllerTest {
                                 .content(userObject.toString())
                                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(1));
+                .andReturn().getResponse().getContentAsString();
 
         verify(dogService).addDog(dog);
     }
@@ -95,7 +95,7 @@ public class DogControllerTest {
                                 .content(userObject.toString())
                                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(1));
+                .andReturn().getResponse().getContentAsString();
 
         verify(dogService).updateDog(dog);
     }

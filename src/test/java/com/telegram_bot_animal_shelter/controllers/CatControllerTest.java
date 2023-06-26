@@ -1,6 +1,5 @@
-package com.telegram_bot_animal_shelter.controller;
+package com.telegram_bot_animal_shelter.controllers;
 
-import com.telegram_bot_animal_shelter.controllers.CatController;
 import com.telegram_bot_animal_shelter.model.Cat;
 import com.telegram_bot_animal_shelter.service.CatService;
 import org.json.JSONObject;
@@ -20,7 +19,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 /**
  * Class CatControllerTest
- * @author
+ * @author Zhitar Vladislav
  * @version 1.0.0
  */
 @WebMvcTest(CatController.class)

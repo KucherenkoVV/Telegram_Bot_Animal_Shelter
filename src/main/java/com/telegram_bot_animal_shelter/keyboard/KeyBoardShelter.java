@@ -1,12 +1,10 @@
 package com.telegram_bot_animal_shelter.keyboard;
 
-import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.model.request.KeyboardButton;
 import com.pengrad.telegrambot.model.request.ParseMode;
 import com.pengrad.telegrambot.model.request.ReplyKeyboardMarkup;
 import com.pengrad.telegrambot.request.SendMessage;
 import com.pengrad.telegrambot.response.SendResponse;
-import com.telegram_bot_animal_shelter.listener.TelegramBotUpdateListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,11 +13,14 @@ import org.springframework.stereotype.Service;
 @Service
 public class KeyBoardShelter {
 
+    private com.pengrad.telegrambot.TelegramBot telegramBot;
+
+    private static final Logger logger = LoggerFactory.getLogger(KeyBoardShelter.class);
 
     @Autowired
-    private TelegramBot telegramBot;
-
-    private static final Logger logger = LoggerFactory.getLogger(TelegramBotUpdateListener.class);
+    public KeyBoardShelter(com.pengrad.telegrambot.TelegramBot telegramBot) {
+        this.telegramBot = telegramBot;
+    }
 
     /**
      * Display menu with a basic set of buttons.
@@ -146,4 +147,3 @@ public class KeyBoardShelter {
         replyKeyboardMarkup.selective(false);
     }
 }
-

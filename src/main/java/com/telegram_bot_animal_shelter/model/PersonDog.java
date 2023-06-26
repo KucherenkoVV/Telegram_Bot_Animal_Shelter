@@ -31,6 +31,11 @@ public class PersonDog extends Person{
     @JsonIgnore
     private Long id;
 
+    /**
+     * Person was chosen Animal shelter Cat
+     */
+    private boolean isChooseDog = false;
+
     public PersonDog(String name, int yearOfBirth, String phone, String address, Long chatId, Status status, Dog dog) {
         super(name, yearOfBirth, phone, address, chatId, status);
         this.dog = dog;

@@ -1,5 +1,6 @@
 package com.telegram_bot_animal_shelter.service;
 
+import com.telegram_bot_animal_shelter.exceptions.ReportNotFoundException;
 import com.telegram_bot_animal_shelter.model.Report;
 import com.telegram_bot_animal_shelter.repository.ReportRepository;
 import org.assertj.core.api.Assertions;
@@ -13,10 +14,13 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.*;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 /**
  * Class ReportServiceImplTest
- * @author
+ * @author Zhitar Vladislav
  * @version 1.0.0
  */
 @ExtendWith(MockitoExtension.class)
@@ -54,6 +58,16 @@ public class ReportServiceImplTest {
         Assertions.assertThat(report.getHabits()).isEqualTo(report.getHabits());
         Assertions.assertThat(report.getDays()).isEqualTo(report.getDays());
         Assertions.assertThat(report.getCaption()).isEqualTo(report.getCaption());
+    }
+
+    /**
+     * Error Throwing test
+     */
+    @Test
+    public void getByIdExceptionTest() {
+        Mockito.when(reportRepositoryMock.findById(any(Long.class))).thenThrow(ReportNotFoundException.class);
+
+        org.junit.jupiter.api.Assertions.assertThrows(ReportNotFoundException.class, () -> reportService.getByIdReport(1L));
     }
 
     /**
@@ -96,6 +110,16 @@ public class ReportServiceImplTest {
     }
 
     /**
+     * Error Throwing test
+     */
+    @Test
+    public void updateExceptionTest() {
+        Report expected = new Report();
+
+        org.junit.jupiter.api.Assertions.assertThrows(ReportNotFoundException.class, () -> reportService.updateReport(expected));
+    }
+
+    /**
      * Testing method for getting all reports
      */
     @Test
@@ -106,5 +130,13 @@ public class ReportServiceImplTest {
         Assertions.assertThat(report).isEqualTo(reports);
     }
 
-
+    /**
+     * Testing method for removeById
+     */
+    @Test
+    public void removeByIdReport() {
+        Long reportID = 1L;
+        reportService.removeByIdReport(reportID);
+        verify(reportRepositoryMock, times(1)).deleteById(eq(reportID));
+    }
 }

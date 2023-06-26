@@ -1,5 +1,6 @@
 package com.telegram_bot_animal_shelter.service;
 
+import com.telegram_bot_animal_shelter.exceptions.CatNotFoundException;
 import com.telegram_bot_animal_shelter.model.Cat;
 import com.telegram_bot_animal_shelter.repository.CatRepository;
 import org.assertj.core.api.Assertions;
@@ -7,16 +8,16 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.*;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
 /**
  * Class CatServiceImplTest
- * @author
+ * @author Zhitar Vladislav
  * @version 1.0.0
  */
 @ExtendWith(MockitoExtension.class)
@@ -42,7 +43,7 @@ public class CatServiceImplTest {
      */
     @Test
     public void getByIdCat() {
-        Mockito.when(catRepositoryMock.findById(any(Long.class))).thenReturn(Optional.of(cat));
+        when(catRepositoryMock.findById(any(Long.class))).thenReturn(Optional.of(cat));
         Cat cat1 = catService.getByIdCat(1L);
         Assertions.assertThat(cat1.getName()).isEqualTo(cat.getName());
         Assertions.assertThat(cat1.getBreed()).isEqualTo(cat.getBreed());
@@ -51,11 +52,21 @@ public class CatServiceImplTest {
     }
 
     /**
+     * Error Throwing test
+     */
+    @Test
+    public void getByIdExceptionTest() {
+        when(catRepositoryMock.findById(any(Long.class))).thenThrow(CatNotFoundException.class);
+
+        org.junit.jupiter.api.Assertions.assertThrows(CatNotFoundException.class, () -> catService.getByIdCat(1L));
+    }
+
+    /**
      * Testing method for adding cats
      */
     @Test
     public void addCat() {
-        Mockito.when(catRepositoryMock.save(any(Cat.class))).thenReturn(cat);
+        when(catRepositoryMock.save(any(Cat.class))).thenReturn(cat);
         Cat cat1 = catService.addCat(cat);
         Assertions.assertThat(cat1.getName()).isEqualTo(cat.getName());
         Assertions.assertThat(cat1.getBreed()).isEqualTo(cat.getBreed());
@@ -74,8 +85,8 @@ public class CatServiceImplTest {
         cat1.setBreed("Африкансий");
         cat1.setAge(15);
         cat1.setId(1L);
-        Mockito.when(catRepositoryMock.findById(any(Long.class))).thenReturn(Optional.of(cat1));
-        Mockito.when(catRepositoryMock.save(any(Cat.class))).thenReturn(cat1);
+        when(catRepositoryMock.findById(any(Long.class))).thenReturn(Optional.of(cat1));
+        when(catRepositoryMock.save(any(Cat.class))).thenReturn(cat1);
         Cat cat2 = catService.updateCat(cat1);
         Assertions.assertThat(cat2.getName()).isEqualTo(cat1.getName());
         Assertions.assertThat(cat2.getBreed()).isEqualTo(cat1.getBreed());
@@ -84,13 +95,34 @@ public class CatServiceImplTest {
     }
 
     /**
+     * Error Throwing test
+     */
+    @Test
+    public void updateExceptionTest() {
+        Cat expected = new Cat();
+
+        org.junit.jupiter.api.Assertions.assertThrows(CatNotFoundException.class, () -> catService.updateCat(expected));
+    }
+
+    /**
      * Testing method for getting all cats
      */
     @Test
     public void getAllCats() {
-        Mockito.when(catRepositoryMock.findAll()).thenReturn(cats);
+        when(catRepositoryMock.findAll()).thenReturn(cats);
         Collection<Cat> cat = catService.getAllCat();
         Assertions.assertThat(cat.size()).isEqualTo(cats.size());
         Assertions.assertThat(cat).isEqualTo(cats);
+    }
+
+    /**
+     * Testing method for removeById
+     */
+    @Test
+    public void removeByIdCat() {
+        Long catID = 1L;
+        catService.removeByIdCat(catID);
+        verify(catRepositoryMock, times(1)).deleteById(eq(catID));
+
     }
 }

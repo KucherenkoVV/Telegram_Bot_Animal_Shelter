@@ -1,5 +1,6 @@
 package com.telegram_bot_animal_shelter.service;
 
+import com.telegram_bot_animal_shelter.exceptions.PersonDogNotFoundException;
 import com.telegram_bot_animal_shelter.model.PersonDog;
 import com.telegram_bot_animal_shelter.model.Status;
 import com.telegram_bot_animal_shelter.repository.PersonDogRepository;
@@ -14,10 +15,13 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.*;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 /**
  * Class PersonCatServiceImplTest
- * @author
+ * @author Zhitar Vladislav
  * @version 1.0.0
  */
 @ExtendWith(MockitoExtension.class)
@@ -54,6 +58,16 @@ public class PersonDogServiceImplTest {
         Assertions.assertThat(dog.getPhone()).isEqualTo(personDog.getPhone());
         Assertions.assertThat(dog.getAddress()).isEqualTo(personDog.getAddress());
         Assertions.assertThat(dog.getChatId()).isEqualTo(personDog.getChatId());
+    }
+
+    /**
+     * Error Throwing test
+     */
+    @Test
+    public void getByIdExceptionTest() {
+        Mockito.when(personDogRepositoryMock.findById(any(Long.class))).thenThrow(PersonDogNotFoundException.class);
+
+        org.junit.jupiter.api.Assertions.assertThrows(PersonDogNotFoundException.class, () -> personDogService.getByIdPersonDog(1L));
     }
 
     /**
@@ -96,6 +110,16 @@ public class PersonDogServiceImplTest {
     }
 
     /**
+     * Error Throwing test
+     */
+    @Test
+    public void updateExceptionTest() {
+        PersonDog expected = new PersonDog();
+
+        org.junit.jupiter.api.Assertions.assertThrows(PersonDogNotFoundException.class, () -> personDogService.updatePersonDog(expected));
+    }
+
+    /**
      * Testing method for getting all personDog
      */
     @Test
@@ -104,5 +128,15 @@ public class PersonDogServiceImplTest {
         Collection<PersonDog> personDog1 = personDogService.getAllPersonDog();
         Assertions.assertThat(personDog1.size()).isEqualTo(personDogs.size());
         Assertions.assertThat(personDog1).isEqualTo(personDogs);
+    }
+
+    /**
+     * Testing method for removeById
+     */
+    @Test
+    public void removeByIdPersonDog() {
+        Long personDogID = 1L;
+        personDogService.removeByIdPersonDog(personDogID);
+        verify(personDogRepositoryMock, times(1)).deleteById(eq(personDogID));
     }
 }

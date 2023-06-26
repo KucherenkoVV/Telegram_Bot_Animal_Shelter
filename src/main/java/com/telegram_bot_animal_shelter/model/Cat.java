@@ -34,4 +34,5 @@ public class Cat extends Animal {
     public Cat(String name, String breed, int age, String description) {
         super(name, breed, age, description);
     }
+
 }

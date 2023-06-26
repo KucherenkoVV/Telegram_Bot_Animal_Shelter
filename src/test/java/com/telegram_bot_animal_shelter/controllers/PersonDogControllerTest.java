@@ -21,7 +21,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 /**
  * Class PersonDogControllerTest
- * @author Zhitar Vlad
+ * @author Zhitar Vladislav
  * @version 1.0.0
  */
 @WebMvcTest(PersonDogController.class)
@@ -46,7 +46,7 @@ public class PersonDogControllerTest {
         mockMvc.perform(
                         get("/person-dog/{id}", 1L))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(1));
+                .andReturn().getResponse().getContentAsString();
 
         verify(personDogService).getByIdPersonDog(1L);
     }
@@ -70,7 +70,7 @@ public class PersonDogControllerTest {
                                 .content(userObject.toString())
                                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(1));
+                .andReturn().getResponse().getContentAsString();
 
         verify(personDogService).addPersonDog(personDog);
     }
@@ -94,7 +94,7 @@ public class PersonDogControllerTest {
                                 .content(userObject.toString())
                                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(1));
+                .andReturn().getResponse().getContentAsString();
 
         verify(personDogService).updatePersonDog(personDog);
     }

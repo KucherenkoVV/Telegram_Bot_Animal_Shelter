@@ -1,5 +1,6 @@
 package com.telegram_bot_animal_shelter.service;
 
+import com.telegram_bot_animal_shelter.exceptions.PersonCatNotFoundException;
 import com.telegram_bot_animal_shelter.model.PersonCat;
 import com.telegram_bot_animal_shelter.model.Status;
 import com.telegram_bot_animal_shelter.repository.PersonCatRepository;
@@ -14,10 +15,13 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.*;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 /**
  * Class PersonCatServiceImplTest
- * @author
+ * @author Zhitar Vladislav
  * @version 1.0.0
  */
 @ExtendWith(MockitoExtension.class)
@@ -54,6 +58,16 @@ public class PersonCatServiceImplTest {
         Assertions.assertThat(cat.getPhone()).isEqualTo(personCat.getPhone());
         Assertions.assertThat(cat.getAddress()).isEqualTo(personCat.getAddress());
         Assertions.assertThat(cat.getChatId()).isEqualTo(personCat.getChatId());
+    }
+
+    /**
+     * Error Throwing test
+     */
+    @Test
+    public void getByIdExceptionTest() {
+        Mockito.when(personCatRepositoryMock.findById(any(Long.class))).thenThrow(PersonCatNotFoundException.class);
+
+        org.junit.jupiter.api.Assertions.assertThrows(PersonCatNotFoundException.class, () -> personCatService.getByIdPersonCat(1L));
     }
 
     /**
@@ -96,6 +110,16 @@ public class PersonCatServiceImplTest {
     }
 
     /**
+     * Error Throwing test
+     */
+    @Test
+    public void updateExceptionTest() {
+        PersonCat expected = new PersonCat();
+
+        org.junit.jupiter.api.Assertions.assertThrows(PersonCatNotFoundException.class, () -> personCatService.updatePersonCat(expected));
+    }
+
+    /**
      * Testing method for getting all personCat
      */
     @Test
@@ -104,5 +128,15 @@ public class PersonCatServiceImplTest {
         Collection<PersonCat> cat = personCatService.getAllPersonCat();
         Assertions.assertThat(cat.size()).isEqualTo(personCats.size());
         Assertions.assertThat(cat).isEqualTo(personCats);
+    }
+
+    /**
+     * Testing method for removeById
+     */
+    @Test
+    public void removeByIdPersonCat() {
+        Long personCatID = 1L;
+        personCatService.removeByIdPersonCat(personCatID);
+        verify(personCatRepositoryMock, times(1)).deleteById(eq(personCatID));
     }
 }

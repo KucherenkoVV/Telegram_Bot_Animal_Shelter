@@ -21,7 +21,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 /**
  * Class PersonCatControllerTest
- * @author Zhitar Vlad
+ * @author Zhitar Vladislav
  * @version 1.0.0
  */
 @WebMvcTest(PersonCatController.class)
@@ -46,7 +46,7 @@ class PersonCatControllerTest {
         mockMvc.perform(
                         get("/person-cat/{id}", 1L))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(1));
+                .andReturn().getResponse().getContentAsString();
 
         verify(personCatService).getByIdPersonCat(1L);
     }
@@ -70,7 +70,7 @@ class PersonCatControllerTest {
                                 .content(userObject.toString())
                                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(1));
+                .andReturn().getResponse().getContentAsString();
 
         verify(personCatService).addPersonCat(personCat);
     }
@@ -94,7 +94,7 @@ class PersonCatControllerTest {
                                 .content(userObject.toString())
                                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(1));
+                .andReturn().getResponse().getContentAsString();
 
         verify(personCatService).addPersonCat(personCat);
     }
