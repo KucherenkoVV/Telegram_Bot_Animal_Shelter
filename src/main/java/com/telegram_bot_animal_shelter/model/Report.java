@@ -51,23 +51,6 @@ public class Report {
      */
     private String habits;
 
-    public Report(Long chatId, String ration, String health, String habits, Long days, String filePath, Long fileSize,
-                  byte[] data, String caption, Date lastMessage, Long lastMessageMs, PersonCat personCat, PersonDog personDog) {
-        this.chatId = chatId;
-        this.ration = ration;
-        this.health = health;
-        this.habits = habits;
-        this.days = Long.valueOf(0);
-        this.filePath = filePath;
-        this.fileSize = fileSize;
-        this.data = data;
-        this.caption = caption;
-        this.lastMessage = lastMessage;
-        this.lastMessageMs = lastMessageMs;
-        this.personCat = personCat;
-        this.personDog = personDog;
-    }
-
     /**
      * How many days person send a report
      * @param days
@@ -119,8 +102,32 @@ public class Report {
     @JoinColumn(referencedColumnName = "id")
     private PersonDog personDog;
 
-    public Report(Long chatId, String ration, String health, String habits, Long days, String caption) {
 
+
+    public Report(Long chatId, String ration, String health, String habits, Long days, String filePath, Long fileSize,
+                  byte[] data, String caption, Date lastMessage, Long lastMessageMs, PersonCat personCat, PersonDog personDog) {
+        this.chatId = chatId;
+        this.ration = ration;
+        this.health = health;
+        this.habits = habits;
         this.days = Long.valueOf(0);
+        this.filePath = filePath;
+        this.fileSize = fileSize;
+        this.data = data;
+        this.caption = caption;
+        this.lastMessage = lastMessage;
+        this.lastMessageMs = lastMessageMs;
+        this.personCat = personCat;
+        this.personDog = personDog;
+    }
+
+
+    public Report(Long chatId, String ration, String health, String habits, Long days, String caption) {
+        this.chatId = chatId;
+        this.ration = ration;
+        this.health = health;
+        this.habits = habits;
+        this.days = days;
+        this.caption = caption;
     }
 }

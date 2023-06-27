@@ -1,5 +1,4 @@
 --liquibase formatted sql
---changeset Dmitriy:1
 
 CREATE TABLE CAT
 (
@@ -69,7 +68,7 @@ CREATE TABLE report
     ration        VARCHAR NOT NULL,
     health        VARCHAR NOT NULL,
     habits        VARCHAR NOT NULL,
-    days          INT     NOT NULL,
+    days          BIGINT     NOT NULL,
     filePath      VARCHAR NOT NULL,
     fileSize      BIGINT  NOT NULL,
     caption       VARCHAR NOT NULL,

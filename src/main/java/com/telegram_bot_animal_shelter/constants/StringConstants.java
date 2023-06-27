@@ -4,6 +4,10 @@ package com.telegram_bot_animal_shelter.constants;
 public abstract class StringConstants {
     public static final String START = "/start";
 
+    public static final String WELCOME = "Добро пожаловать, в наш приют";
+
+    public static final String FIND_INFORMATION = "Здесь вы сможете найти всю необходимую информацию.";
+
     public static final String CAT = "Кошка";
 
     public static final String DOG = "Собака";
@@ -25,6 +29,8 @@ public abstract class StringConstants {
     public static final String SAY_HI = "Привет";
 
     public static final String SAY_HI2 = "привет";
+
+    public static final String CHOOSE_PET = "Выберите, кого хотите приютить:";
 
     public static final String SET_CAT_ANIMAL = "Вы выбрали кошачий приют.";
 
@@ -129,9 +135,9 @@ public abstract class StringConstants {
             "Самочувствие: ваш текст\n" +
             "Поведение: ваш текст";
 
-    public static final String REGEX_MESSAGE = "(Рацион:)(\\s)(\\W+)\n" +
-            "(Самочувствие:)(\\s)(\\W+)\n" +
-            "(Поведение:)(\\s)(\\W+)";
+    public static final String REGEX_MESSAGE = "(Рацион:)(\\s)(\\W+)\n;" +
+            "(Самочувствие:)(\\s)(\\W+)\n;" +
+            "(Поведение:)(\\s)(\\W+);";
 
     public static final long telegramChatVolunteers = 543337033;
 }

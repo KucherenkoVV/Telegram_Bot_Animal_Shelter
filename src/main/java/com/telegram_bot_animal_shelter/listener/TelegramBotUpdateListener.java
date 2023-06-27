@@ -44,28 +44,17 @@ import static com.telegram_bot_animal_shelter.constants.StringConstants.*;
 public class TelegramBotUpdateListener implements UpdatesListener {
 
     private static final Logger logger = LoggerFactory.getLogger(TelegramBotUpdateListener.class);
-
     private ReportRepository reportRepository;
-
     private PersonDogRepository personDogRepository;
-
     private PersonCatRepository personCatRepository;
-
     private KeyBoardShelter keyBoardShelter;
-
     private ReportService reportService;
-
     private com.pengrad.telegrambot.TelegramBot telegramBot;
+    private Report report;
+    private PersonCat personCat;
+    private PersonDog personDog;
+    private final Pattern pattern = Pattern.compile(REGEX_MESSAGE);
 
-    private Report report = new Report();
-
-    private PersonCat personCat = new PersonCat();
-
-    private PersonDog personDog = new PersonDog();
-
-    Pattern pattern = Pattern.compile(REGEX_MESSAGE);
-
-    @Autowired
     public TelegramBotUpdateListener(ReportRepository reportRepository, PersonDogRepository personDogRepository,
                                      PersonCatRepository personCatRepository, KeyBoardShelter keyBoardShelter,
                                      ReportService reportService, TelegramBot telegramBot) {
@@ -75,11 +64,7 @@ public class TelegramBotUpdateListener implements UpdatesListener {
         this.keyBoardShelter = keyBoardShelter;
         this.reportService = reportService;
         this.telegramBot = telegramBot;
-    }
 
-
-    public TelegramBotUpdateListener(com.pengrad.telegrambot.TelegramBot telegramBot) {
-        this.telegramBot = telegramBot;
     }
 
     @PostConstruct
@@ -97,6 +82,8 @@ public class TelegramBotUpdateListener implements UpdatesListener {
     @Override
     public int process(List<Update> updates) {
 
+        report = new Report();
+
         updates.forEach(update -> {
             logger.info("Processing update: {}", update);
 
@@ -105,7 +92,6 @@ public class TelegramBotUpdateListener implements UpdatesListener {
             Integer messageId = update.message().messageId();
             Long chatId = update.message().chat().id();
             Calendar calendar = new GregorianCalendar();
-
 
             checkReportDays(update, chatId, calendar);
 
@@ -123,17 +109,15 @@ public class TelegramBotUpdateListener implements UpdatesListener {
                             break;
 
                         case CAT:
-                            personCat.setChooseCat(true);
-                            personDog.setChooseDog(false);
                             keyBoardShelter.sendMenu(chatId);
                             sendMessage(chatId, SET_CAT_ANIMAL);
+                            setNewPersonCat();
                             break;
 
                         case DOG:
-                            personDog.setChooseDog(true);
-                            personCat.setChooseCat(false);
                             keyBoardShelter.sendMenu(chatId);
                             sendMessage(chatId, SET_DOG_ANIMAL);
+                            setNewPersonDog();
                             break;
 
                         case MAIN_MENU:
@@ -185,7 +169,7 @@ public class TelegramBotUpdateListener implements UpdatesListener {
                         case SEND_REPORT:
                             sendMessage(chatId, INFO_ABOUT_REPORT);
                             sendMessage(chatId, REPORT_EXAMPLE);
-                            getReport(update);
+                            break;
 
                         case HOW_GET_ANIMAL:
                             keyBoardShelter.sendMenuTakeAnimal(chatId);
@@ -231,6 +215,22 @@ public class TelegramBotUpdateListener implements UpdatesListener {
         });
 
         return UpdatesListener.CONFIRMED_UPDATES_ALL;
+    }
+
+    private void setNewPersonDog() {
+        personDog = new PersonDog();
+        personDog.setChooseDog(true);
+        if(personCat != null){
+            personCat.setChooseCat(false);
+        }
+    }
+
+    private void setNewPersonCat() {
+        personCat = new PersonCat();
+        personCat.setChooseCat(true);
+        if(personDog != null){
+            personDog.setChooseDog(false);
+        }
     }
 
     private void checkReportDays(Update update, long chatId, Calendar calendar) {
@@ -369,7 +369,6 @@ public class TelegramBotUpdateListener implements UpdatesListener {
             GetFileResponse getFileResponse = telegramBot.execute(getFileRequest);
             try {
                 File file = getFileResponse.file();
-                file.fileSize();
                 String fullPathPhoto = file.filePath();
 
                 long timeDate = update.message().date();
