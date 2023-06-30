@@ -2,7 +2,7 @@ package com.telegram_bot_animal_shelter.controllers;
 
 import com.telegram_bot_animal_shelter.listener.TelegramBotUpdateListener;
 import com.telegram_bot_animal_shelter.model.Report;
-import com.telegram_bot_animal_shelter.service.impl.ReportService;
+import com.telegram_bot_animal_shelter.service.impl.ReportServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -27,18 +27,18 @@ import java.util.Collection;
 @RequestMapping("photoReports")
 public class ReportController {
 
-    private final ReportService reportService;
+    private final ReportServiceImpl reportService;
 
     private TelegramBotUpdateListener telegramBot;
 
     private final String fileType = "image/jpeg";
 
-    public ReportController(ReportService reportService) {
+    public ReportController(ReportServiceImpl reportService) {
         this.reportService = reportService;
     }
 
     @Autowired
-    public ReportController(ReportService reportService, TelegramBotUpdateListener telegramBot) {
+    public ReportController(ReportServiceImpl reportService, TelegramBotUpdateListener telegramBot) {
         this.reportService = reportService;
         this.telegramBot = telegramBot;
     }
