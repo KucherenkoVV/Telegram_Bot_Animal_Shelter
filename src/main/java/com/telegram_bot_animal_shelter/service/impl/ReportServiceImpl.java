@@ -19,13 +19,13 @@ import java.util.Date;
  * @version 1.0.0
  */
 @Service
-public class ReportService implements com.telegram_bot_animal_shelter.service.ReportService {
+public class ReportServiceImpl implements com.telegram_bot_animal_shelter.service.ReportService {
 
     private final ReportRepository repository;
 
-    private static final Logger logger = LoggerFactory.getLogger(ReportService.class);
+    private static final Logger logger = LoggerFactory.getLogger(ReportServiceImpl.class);
 
-    public ReportService(ReportRepository repository) {
+    public ReportServiceImpl(ReportRepository repository) {
         this.repository = repository;
     }
 

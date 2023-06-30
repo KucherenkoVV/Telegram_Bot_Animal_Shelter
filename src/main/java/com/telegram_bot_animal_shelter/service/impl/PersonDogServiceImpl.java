@@ -15,13 +15,13 @@ import java.util.Collection;
  * @version 1.0.0
  */
 @Service
-public class PersonDogService implements com.telegram_bot_animal_shelter.service.PersonDogService {
+public class PersonDogServiceImpl implements com.telegram_bot_animal_shelter.service.PersonDogService {
 
     private final PersonDogRepository repository;
 
-    private static final Logger logger = LoggerFactory.getLogger(PersonDogService.class);
+    private static final Logger logger = LoggerFactory.getLogger(PersonDogServiceImpl.class);
 
-    public PersonDogService(PersonDogRepository repository) {
+    public PersonDogServiceImpl(PersonDogRepository repository) {
         this.repository = repository;
     }
 

@@ -21,7 +21,6 @@ import com.telegram_bot_animal_shelter.repository.ReportRepository;
 import com.telegram_bot_animal_shelter.service.ReportService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -50,9 +49,9 @@ public class TelegramBotUpdateListener implements UpdatesListener {
     private KeyBoardShelter keyBoardShelter;
     private ReportService reportService;
     private com.pengrad.telegrambot.TelegramBot telegramBot;
-    private Report report;
-    private PersonCat personCat;
-    private PersonDog personDog;
+    private Map<Long, Report> reportMap = new HashMap<>();
+    private Map<Long, PersonCat> personCatMap = new HashMap<>();
+    private Map<Long, PersonDog> personDogMap = new HashMap<>();
     private final Pattern pattern = Pattern.compile(REGEX_MESSAGE);
 
     public TelegramBotUpdateListener(ReportRepository reportRepository, PersonDogRepository personDogRepository,
@@ -82,8 +81,6 @@ public class TelegramBotUpdateListener implements UpdatesListener {
     @Override
     public int process(List<Update> updates) {
 
-        report = new Report();
-
         updates.forEach(update -> {
             logger.info("Processing update: {}", update);
 
@@ -96,6 +93,7 @@ public class TelegramBotUpdateListener implements UpdatesListener {
             checkReportDays(update, chatId, calendar);
 
             try {
+
                 if (update.message() != null && update.message().contact() != null) {
                     shareContact(update);
                 }
@@ -111,13 +109,22 @@ public class TelegramBotUpdateListener implements UpdatesListener {
                         case CAT:
                             keyBoardShelter.sendMenu(chatId);
                             sendMessage(chatId, SET_CAT_ANIMAL);
-                            setNewPersonCat();
+                            personCatMap.put(chatId, new PersonCat());
+                            personCatMap.get(chatId).setChooseCat(true);
+                            if (personDogMap.containsKey(chatId)) {
+                                personDogMap.get(chatId).setChooseDog(false);
+                            }
                             break;
 
                         case DOG:
                             keyBoardShelter.sendMenu(chatId);
                             sendMessage(chatId, SET_DOG_ANIMAL);
-                            setNewPersonDog();
+                            personDogMap.put(chatId, new PersonDog());
+                            personDogMap.get(chatId).setChooseDog(true);
+                            if (personCatMap.containsKey(chatId)){
+                                personCatMap.get(chatId).setChooseCat(false);
+                            }
+
                             break;
 
                         case MAIN_MENU:
@@ -143,17 +150,17 @@ public class TelegramBotUpdateListener implements UpdatesListener {
                             break;
 
                         case ABOUT_ANIMAL_SHELTER:
-                            if (personCat.isChooseCat()) {
+                            if (personCatMap.get(chatId).isChooseCat()) {
                                 sendMessage(chatId, INFO_ABOUT_SHELTER_CAT);
-                            } else if (personDog.isChooseDog()) {
+                            } else if (personDogMap.get(chatId).isChooseDog()) {
                                 sendMessage(chatId, INFO_ABOUT_SHELTER_DOG);
                             }
                             break;
 
                         case TIPS_AND_RECOMMENDATIONS:
-                            if (personCat.isChooseCat()) {
+                            if (personCatMap.get(chatId).isChooseCat()) {
                                 sendMessage(chatId, INFO_ABOUT_CATS);
-                            } else if (personDog.isChooseDog()) {
+                            } else if (personDogMap.get(chatId).isChooseDog()) {
                                 sendMessage(chatId, INFO_ABOUT_DOGS);
                             }
                             break;
@@ -205,7 +212,6 @@ public class TelegramBotUpdateListener implements UpdatesListener {
                         default:
                             sendReplyMessage(chatId, UNKNOWN_MESSAGE, messageId);
                             break;
-
                     }
                 }
             } catch (MenuDoesntWorkException e) {
@@ -217,25 +223,10 @@ public class TelegramBotUpdateListener implements UpdatesListener {
         return UpdatesListener.CONFIRMED_UPDATES_ALL;
     }
 
-    private void setNewPersonDog() {
-        personDog = new PersonDog();
-        personDog.setChooseDog(true);
-        if(personCat != null){
-            personCat.setChooseCat(false);
-        }
-    }
-
-    private void setNewPersonCat() {
-        personCat = new PersonCat();
-        personCat.setChooseCat(true);
-        if(personDog != null){
-            personDog.setChooseDog(false);
-        }
-    }
-
-    private void checkReportDays(Update update, long chatId, Calendar calendar) {
+    public void checkReportDays(Update update, long chatId, Calendar calendar) {
         long compareTime = calendar.get(Calendar.DAY_OF_MONTH);
-        report.setDays(reportRepository.findAll().stream()
+        reportMap.put(chatId, new Report());
+        reportMap.get(chatId).setDays(reportRepository.findAll().stream()
                 .filter(s -> Objects.equals(s.getChatId(), chatId))
                 .count() + 1);
 
@@ -248,17 +239,18 @@ public class TelegramBotUpdateListener implements UpdatesListener {
             Date lastDateSendMessage = new Date(lastMessageTime * 1000);
             long numberOfDay = lastDateSendMessage.getDate();
 
-            if (report.getDays() < 30) {
+            if (reportMap.get(chatId).getDays() < 30) {
                 if (compareTime != numberOfDay) {
                     if (update.message() != null && update.message().photo() != null && update.message().caption() != null) {
                         getReport(update);
+                        checkResults();
                     }
                 } else {
                     if (update.message() != null && update.message().photo() != null && update.message().caption() != null) {
                         sendMessage(chatId, ALREADY_SEND_REPORT);
                     }
                 }
-                if (report.getDays() >= 30) {
+                if (reportMap.get(chatId).getDays() >= 30) {
                     sendMessage(chatId, TRIAL_PERIOD_PASSED);
                 }
             }
@@ -332,24 +324,23 @@ public class TelegramBotUpdateListener implements UpdatesListener {
             }
             if (lastName != null) {
                 String name = firstName + " " + lastName + " " + username;
-                if (personCat.isChooseCat()) {
-                    personCatRepository.save(new PersonCat(name, phone, finalChatId));
-                } else if (personDog.isChooseDog()) {
-                    personDogRepository.save(new PersonDog(name, phone, finalChatId));
-                }
-                sendMessage(finalChatId, ADD_TO_DB);
+                savePersonToMap(update, phone, finalChatId, name);
                 return;
             }
-            if (personCat.isChooseCat()) {
-                personCatRepository.save(new PersonCat(firstName, phone, finalChatId));
-            } else if (personDog.isChooseDog()) {
-                personDogRepository.save(new PersonDog(firstName, phone, finalChatId));
-            }
-            sendMessage(finalChatId, ADD_TO_DB);
+            savePersonToMap(update, phone, finalChatId, firstName);
 
             sendMessage(telegramChatVolunteers, phone + " " + firstName + USER_ADDED_PHONE_NUMBER_TO_DB);
             sendForwardMessage(finalChatId, update.message().messageId());
         }
+    }
+
+    private void savePersonToMap(Update update, String phone, long finalChatId, String name) {
+        if (personCatMap.containsKey(update.message().chat().id())) {
+            personCatRepository.save(new PersonCat(name, phone, finalChatId, true));
+        } else if (personDogMap.containsKey(update.message().chat().id())) {
+            personDogRepository.save(new PersonDog(name, phone, finalChatId, true));
+        }
+        sendMessage(finalChatId, ADD_TO_DB);
     }
 
     /**
@@ -360,6 +351,7 @@ public class TelegramBotUpdateListener implements UpdatesListener {
      */
     public void getReport(Update update) {
         Matcher matcher = pattern.matcher(update.message().caption());
+        Long reportDays = reportMap.get(update.message().chat().id()).getDays();
         if (matcher.matches()) {
             String ration = matcher.group(3);
             String health = matcher.group(7);
@@ -375,7 +367,7 @@ public class TelegramBotUpdateListener implements UpdatesListener {
                 Date dateSendMessage = new Date(timeDate * 1000);
                 byte[] fileContent = telegramBot.getFileContent(file);
                 reportService.uploadReport(update.message().chat().id(), fileContent, file,
-                        ration, health, habits, fullPathPhoto, dateSendMessage, timeDate, report.getDays());
+                        ration, health, habits, fullPathPhoto, dateSendMessage, timeDate, reportDays);
 
                 telegramBot.execute(new SendMessage(update.message().chat().id(), REPORT_IS_OK));
 
@@ -394,7 +386,7 @@ public class TelegramBotUpdateListener implements UpdatesListener {
                 Date dateSendMessage = new Date(timeDate * 1000);
                 byte[] fileContent = telegramBot.getFileContent(file);
                 reportService.uploadReport(update.message().chat().id(), fileContent, file, update.message().caption(),
-                        fullPathPhoto, dateSendMessage, timeDate, report.getDays());
+                        fullPathPhoto, dateSendMessage, timeDate, reportDays);
 
                 telegramBot.execute(new SendMessage(update.message().chat().id(), REPORT_IS_OK));
                 logger.info(REPORT_RECEIVED + update.message().chat().id());
@@ -404,25 +396,23 @@ public class TelegramBotUpdateListener implements UpdatesListener {
         }
     }
 
+
     /**
      * A method that allows you to track the sending of reports.
      * What doing: check how many days user was sent correct report
      *
      * @see TelegramBotUpdateListener
      */
-    @Scheduled(cron = "* 30 21 * * *")
-    public void checkResults() {
-        if (report.getDays() < 30) {
-            var twoDay = 172800000;
-            var nowTime = new Date().getTime() - twoDay;
-            var getDistinct = this.reportRepository.findAll().stream()
-                    .sorted(Comparator
-                            .comparing(Report::getChatId))
-                    .max(Comparator
-                            .comparing(Report::getLastMessageMs));
-            getDistinct.stream()
-                    .filter(i -> i.getLastMessageMs() * 1000 < nowTime)
-                    .forEach(s -> sendMessage(s.getChatId(), REPORT_NOTIFICATION));
-        }
+    private void checkResults() {
+        var twoDay = 172800000;
+        var nowTime = new Date().getTime() - twoDay;
+        var getDistinct = this.reportRepository.findAll().stream()
+                .sorted(Comparator
+                        .comparing(Report::getChatId))
+                .max(Comparator
+                        .comparing(Report::getLastMessageMs));
+        getDistinct.stream()
+                .filter(i -> i.getLastMessageMs() * 1000 < nowTime)
+                .forEach(s -> sendMessage(s.getChatId(), REPORT_NOTIFICATION));
     }
 }
