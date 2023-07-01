@@ -24,7 +24,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
@@ -56,13 +55,13 @@ public class TelegramBotUpdateListener implements UpdatesListener {
 
     private ReportService reportService;
 
-    private com.pengrad.telegrambot.TelegramBot telegramBot;
+    private final com.pengrad.telegrambot.TelegramBot telegramBot;
 
-    private Report report = new Report();
+    private final Report report = new Report();
 
-    private PersonCat personCat = new PersonCat();
+    private final PersonCat personCat = new PersonCat();
 
-    private PersonDog personDog = new PersonDog();
+    private final PersonDog personDog = new PersonDog();
 
     Pattern pattern = Pattern.compile(REGEX_MESSAGE);
 
@@ -234,7 +233,7 @@ public class TelegramBotUpdateListener implements UpdatesListener {
         return UpdatesListener.CONFIRMED_UPDATES_ALL;
     }
 
-    private void checkReportDays(Update update, long chatId, Calendar calendar) {
+    void checkReportDays(Update update, long chatId, Calendar calendar) {
         long compareTime = calendar.get(Calendar.DAY_OF_MONTH);
         report.setDays(reportRepository.findAll().stream()
                 .filter(s -> Objects.equals(s.getChatId(), chatId))

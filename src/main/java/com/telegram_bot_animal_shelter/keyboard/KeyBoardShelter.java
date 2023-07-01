@@ -7,8 +7,9 @@ import com.pengrad.telegrambot.request.SendMessage;
 import com.pengrad.telegrambot.response.SendResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import static com.telegram_bot_animal_shelter.constants.StringConstants.*;
 
 /**
  * @author Kucherenko V.V
@@ -17,11 +18,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class KeyBoardShelter {
 
-    private com.pengrad.telegrambot.TelegramBot telegramBot;
+    private final com.pengrad.telegrambot.TelegramBot telegramBot;
 
     private static final Logger logger = LoggerFactory.getLogger(KeyBoardShelter.class);
 
-    @Autowired
     public KeyBoardShelter(com.pengrad.telegrambot.TelegramBot telegramBot) {
         this.telegramBot = telegramBot;
     }
@@ -37,15 +37,15 @@ public class KeyBoardShelter {
         logger.info("Starting main menu: {}, {}", chatId, "Вызвано основное меню");
 
         ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup(
-                new KeyboardButton("Информация о возможностях бота"),
-                new KeyboardButton("Информация о приюте"));
-        replyKeyboardMarkup.addRow(new KeyboardButton("Как взять питомца из приюта"),
-                new KeyboardButton("Прислать отчет о питомце"));
-        replyKeyboardMarkup.addRow(new KeyboardButton("Обратиться к волонтеру"));
+                new KeyboardButton(INFO_ABOUT_BOT_BUTTON),
+                new KeyboardButton(SHELTER_INFO_MENU));
+        replyKeyboardMarkup.addRow(new KeyboardButton(HOW_GET_ANIMAL),
+                new KeyboardButton(SEND_REPORT));
+        replyKeyboardMarkup.addRow(new KeyboardButton(SEND_MESSAGE_VOLUNTEER));
 
         keyboardUpdate(replyKeyboardMarkup);
 
-        SendMessage request = new SendMessage(chatId, "Добро пожаловать, в наш приют")
+        SendMessage request = new SendMessage(chatId, WELCOME)
                 .replyMarkup(replyKeyboardMarkup)
                 .parseMode(ParseMode.HTML)
                 .disableWebPagePreview(true);
@@ -69,9 +69,9 @@ public class KeyBoardShelter {
     public void sendMenuInfoShelter(long chatId) {
         logger.info("Starting menu information about animal shelter: {}, {}", chatId, "Вызвано меню: Информация о приюте");
 
-        ReplyKeyboardMarkup replyKeyboardMarkup2 = new ReplyKeyboardMarkup(new KeyboardButton("О приюте"),
-                new KeyboardButton("Оставить контактные данные").requestContact(true))
-                .addRow(new KeyboardButton("Схема проезда, пропуск"), new KeyboardButton("Техника безопасности"));
+        ReplyKeyboardMarkup replyKeyboardMarkup2 = new ReplyKeyboardMarkup(new KeyboardButton(ABOUT_ANIMAL_SHELTER),
+                new KeyboardButton(GET_USER_CONTACT).requestContact(true))
+                .addRow(new KeyboardButton(DRIVER_SCHEME), new KeyboardButton(FOR_SAFETY));
         repeatableMenu(chatId, replyKeyboardMarkup2);
     }
 
@@ -81,13 +81,13 @@ public class KeyBoardShelter {
      * @param replyKeyboardMarkup2
      */
     private void repeatableMenu(long chatId, ReplyKeyboardMarkup replyKeyboardMarkup2) {
-        replyKeyboardMarkup2.addRow(new KeyboardButton("Обратиться к волонтеру"),
-                        new KeyboardButton("Вернуться в меню"))
-                .addRow(new KeyboardButton("Вернуться к выбору приюта"));
+        replyKeyboardMarkup2.addRow(new KeyboardButton(SEND_MESSAGE_VOLUNTEER),
+                        new KeyboardButton(RETURN_MENU))
+                .addRow(new KeyboardButton(RETURN_TO_SHELTER_CHOOSE_MENU));
 
         keyboardUpdate(replyKeyboardMarkup2);
 
-        SendMessage request = new SendMessage(chatId, "Здесь вы сможете найти всю необходимую информацию.")
+        SendMessage request = new SendMessage(chatId, FIND_INFORMATION)
                 .replyMarkup(replyKeyboardMarkup2)
                 .parseMode(ParseMode.HTML)
                 .disableWebPagePreview(true);
@@ -111,21 +111,21 @@ public class KeyBoardShelter {
     public void sendMenuTakeAnimal(long chatId) {
         logger.info("Starting menu about take animal from shelter: {}, {}", chatId, "меню: Как взять питомца из приюта");
 
-        ReplyKeyboardMarkup replyKeyboardMarkup3 = new ReplyKeyboardMarkup(new KeyboardButton("Советы и рекомендации"),
-                new KeyboardButton("Оставить контактные данные"))
-                .addRow(new KeyboardButton("Необходимые документы"), new KeyboardButton("Взять питомца с ограниченными возможностями"));
+        ReplyKeyboardMarkup replyKeyboardMarkup3 = new ReplyKeyboardMarkup(new KeyboardButton(TIPS_AND_RECOMMENDATIONS),
+                new KeyboardButton(GET_USER_CONTACT))
+                .addRow(new KeyboardButton(DOCUMENTS), new KeyboardButton(GET_ANIMAL_WITH_DEFECTS));
         repeatableMenu(chatId, replyKeyboardMarkup3);
     }
 
     public void chooseMenu(long chatId) {
         logger.info("Method sendMessage has been run: {}, {}", chatId, "Вызвано меню выбора ");
 
-        String cat = "Кошка";
-        String dog = "Собака";
+        String cat = CAT;
+        String dog = DOG;
         ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup(
                 new KeyboardButton(cat));
         replyKeyboardMarkup.addRow(new KeyboardButton(dog));
-        returnResponseReplyKeyboardMarkup(replyKeyboardMarkup, chatId, "Выберите, кого хотите приютить:");
+        returnResponseReplyKeyboardMarkup(replyKeyboardMarkup, chatId, CHOOSE_PET);
     }
 
     public void returnResponseReplyKeyboardMarkup(ReplyKeyboardMarkup replyKeyboardMarkup, Long chatId, String text) {
