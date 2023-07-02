@@ -97,8 +97,11 @@ public class TelegramBotUpdateListener implements UpdatesListener {
     @Override
     public int process(List<Update> updates) {
 
-        updates.forEach(update -> {
-            logger.info("Processing update: {}", update);
+        updates.stream()
+                .filter(Objects::nonNull)
+                .toList()
+                .forEach(update -> {
+                    logger.info("Processing update: {}", update);
 
             String nameUser = update.message().chat().firstName();
             String textUpdate = update.message().text();
