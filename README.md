@@ -38,7 +38,6 @@
 * PostgreSQL
 * Сборщик Maven v.2.7.7
 * UI API Swagger-ui
-* ...
 
 #### Подключенные библиотеки:
 + org.projectlombok
@@ -48,6 +47,6 @@
 + org.liquibase
 + org.springdoc version 1.6.9
 + org.mockito version 4.1.0
-
++ org.springframework.boot
 ## 
 
