@@ -66,4 +66,8 @@ public abstract class Person {
         this.phone = phone;
         this.chatId = chatId;
     }
+
+    public Person(Long chatId){
+        this.chatId = chatId;
+    }
 }
