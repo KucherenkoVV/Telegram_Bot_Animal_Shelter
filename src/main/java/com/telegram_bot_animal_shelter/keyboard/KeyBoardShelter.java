@@ -79,8 +79,8 @@ public class KeyBoardShelter {
      */
     private void repeatableMenu(long chatId, ReplyKeyboardMarkup replyKeyboardMarkup2) {
         replyKeyboardMarkup2.addRow(new KeyboardButton(SEND_MESSAGE_VOLUNTEER),
-                new KeyboardButton(RETURN_MENU))
-                .addRow(new KeyboardButton(RETURN_TO_SHELTER_CHOOSE_MENU));
+                new KeyboardButton(RETURN_MENU));
+//                .addRow(new KeyboardButton(RETURN_TO_SHELTER_CHOOSE_MENU));
 
         keyboardUpdate(replyKeyboardMarkup2);
 

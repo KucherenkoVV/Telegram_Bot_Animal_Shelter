@@ -36,7 +36,7 @@ public abstract class StringConstants {
 
     public static final String SET_DOG_ANIMAL = "Вы выбрали собачий приют.";
 
-    public static final String RETURN_TO_SHELTER_CHOOSE_MENU = "Вернуться к выбору приюта";
+//    public static final String RETURN_TO_SHELTER_CHOOSE_MENU = "Вернуться к выбору приюта";
 
     public static final String HOW_GET_ANIMAL = "Как взять питомца из приюта";
 
