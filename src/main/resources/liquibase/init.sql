@@ -68,7 +68,7 @@ CREATE TABLE report
     ration        VARCHAR NOT NULL,
     health        VARCHAR NOT NULL,
     habits        VARCHAR NOT NULL,
-    days          BIGINT     NOT NULL,
+    days          BIGINT  NOT NULL,
     filePath      VARCHAR NOT NULL,
     fileSize      BIGINT  NOT NULL,
     caption       VARCHAR NOT NULL,
@@ -77,13 +77,20 @@ CREATE TABLE report
     personCat_id  BIGINT
         constraint personCat_id_FK
             references personCat,
-    personDog_id BIGINT
+    personDog_id  BIGINT
         constraint persondog_id_FK
-        references personDog,
+            references personDog,
 
     id            BIGSERIAL
         constraint report_pk
             primary key
+);
 
-
+CREATE TABLE volunteer
+(
+    id             BIGSERIAL primary key,
+    chat_id        BIGINT,
+    name           VARCHAR,
+    is_active_chat BOOLEAN,
+    chat_id_user   BIGINT
 )

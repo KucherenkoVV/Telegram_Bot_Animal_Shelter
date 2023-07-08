@@ -80,7 +80,6 @@ public class KeyBoardShelter {
     private void repeatableMenu(long chatId, ReplyKeyboardMarkup replyKeyboardMarkup2) {
         replyKeyboardMarkup2.addRow(new KeyboardButton(SEND_MESSAGE_VOLUNTEER),
                 new KeyboardButton(RETURN_MENU));
-//                .addRow(new KeyboardButton(RETURN_TO_SHELTER_CHOOSE_MENU));
 
         keyboardUpdate(replyKeyboardMarkup2);
 
@@ -112,6 +111,12 @@ public class KeyBoardShelter {
                 new KeyboardButton(GET_USER_CONTACT))
                 .addRow(new KeyboardButton(DOCUMENTS), new KeyboardButton(GET_ANIMAL_WITH_DEFECTS));
         repeatableMenu(chatId, replyKeyboardMarkup3);
+    }
+
+    public void sendMenuCloseChat(long chatId) {
+        logger.info("Starting menu close chat: {}, {}", chatId, "меню: Закрыть чат");
+
+        ReplyKeyboardMarkup replyKeyboardMarkup4 = new ReplyKeyboardMarkup(new KeyboardButton(CLOSE));
     }
 
     public void chooseMenu(long chatId) {

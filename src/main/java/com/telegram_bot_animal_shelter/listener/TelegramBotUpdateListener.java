@@ -7,23 +7,24 @@ import com.pengrad.telegrambot.model.request.KeyboardButton;
 import com.pengrad.telegrambot.model.request.ReplyKeyboardMarkup;
 import com.pengrad.telegrambot.request.ForwardMessage;
 import com.pengrad.telegrambot.request.SendMessage;
+import com.telegram_bot_animal_shelter.constants.StringConstants;
 import com.telegram_bot_animal_shelter.exceptions.MenuDoesntWorkException;
 import com.telegram_bot_animal_shelter.handlers.ReportHandler;
+import com.telegram_bot_animal_shelter.handlers.VolunteerChatHandler;
 import com.telegram_bot_animal_shelter.keyboard.KeyBoardShelter;
 import com.telegram_bot_animal_shelter.model.*;
 import com.telegram_bot_animal_shelter.repository.PersonCatRepository;
 import com.telegram_bot_animal_shelter.repository.PersonDogRepository;
 import com.telegram_bot_animal_shelter.repository.ReportRepository;
+import com.telegram_bot_animal_shelter.repository.VolunteerRepository;
 import com.telegram_bot_animal_shelter.service.ReportService;
+import com.telegram_bot_animal_shelter.service.VolunteerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.*;
-import java.util.function.Consumer;
 
 import static com.telegram_bot_animal_shelter.constants.StringConstants.*;
 
@@ -36,24 +37,29 @@ import static com.telegram_bot_animal_shelter.constants.StringConstants.*;
 public class TelegramBotUpdateListener implements UpdatesListener {
 
     private static final Logger logger = LoggerFactory.getLogger(TelegramBotUpdateListener.class);
-    private ReportRepository reportRepository;
-    private PersonDogRepository personDogRepository;
-    private PersonCatRepository personCatRepository;
-    private KeyBoardShelter keyBoardShelter;
-    private ReportService reportService;
-    private com.pengrad.telegrambot.TelegramBot telegramBot;
+    private final ReportRepository reportRepository;
+    private final PersonDogRepository personDogRepository;
+    private final PersonCatRepository personCatRepository;
+    private final KeyBoardShelter keyBoardShelter;
+    private final ReportService reportService;
+    private final VolunteerService volunteerService;
+    private final VolunteerRepository volunteerRepository;
+    private final com.pengrad.telegrambot.TelegramBot telegramBot;
     private ReportHandler reportHandler;
+    private VolunteerChatHandler volunteerChatHandler;
 
 
     public TelegramBotUpdateListener(ReportRepository reportRepository, PersonDogRepository personDogRepository,
                                      PersonCatRepository personCatRepository, KeyBoardShelter keyBoardShelter,
-                                     ReportService reportService, TelegramBot telegramBot) {
+                                     ReportService reportService, TelegramBot telegramBot, VolunteerService volunteerService, VolunteerRepository volunteerRepository) {
         this.reportRepository = reportRepository;
         this.personDogRepository = personDogRepository;
         this.personCatRepository = personCatRepository;
         this.keyBoardShelter = keyBoardShelter;
         this.reportService = reportService;
         this.telegramBot = telegramBot;
+        this.volunteerService = volunteerService;
+        this.volunteerRepository = volunteerRepository;
     }
 
     @PostConstruct
@@ -86,11 +92,17 @@ public class TelegramBotUpdateListener implements UpdatesListener {
                         reportHandler = new ReportHandler(reportRepository, reportService, telegramBot);
                         reportHandler.checkReportDays(update, chatId, calendar);
 
+                        volunteerChatHandler = new VolunteerChatHandler(new Volunteer(), volunteerService, keyBoardShelter,
+                                telegramBot, TelegramBotUpdateListener.this, volunteerRepository,
+                                personCatRepository, personDogRepository);
+
+
                         try {
 
                             if (update.message() != null && update.message().contact() != null) {
                                 shareContact(update);
                             }
+
 
                             if (textUpdate != null) {
                                 switch (textUpdate) {
@@ -178,12 +190,7 @@ public class TelegramBotUpdateListener implements UpdatesListener {
                                         break;
 
                                     case SEND_MESSAGE_VOLUNTEER:
-                                        try {
-                                            URL url = new URL(VOLUNTEER_URL);
-                                            sendMessage(chatId, VOLUNTEER_QUESTION + url);
-                                        } catch (MalformedURLException e) {
-                                            throw new RuntimeException(e);
-                                        }
+                                        volunteerChatHandler.startChatWithVolunteer(update);
                                         break;
 
                                     case EMPTY:
@@ -195,7 +202,7 @@ public class TelegramBotUpdateListener implements UpdatesListener {
                                         sendMessage(chatId, "И тебе привет, " + nameUser + ". Возьми питомца из приюта.");
 
                                     default:
-                                        sendReplyMessage(chatId, UNKNOWN_MESSAGE, messageId);
+                                        volunteerChatHandler.chatWithVolunteer(textUpdate, messageId, chatId);
                                         break;
                                 }
                             }
@@ -229,7 +236,7 @@ public class TelegramBotUpdateListener implements UpdatesListener {
      * @param messageId
      */
     public void sendForwardMessage(Long chatId, Integer messageId) {
-        ForwardMessage forwardMessage = new ForwardMessage(telegramChatVolunteers, chatId, messageId);
+        ForwardMessage forwardMessage = new ForwardMessage(StringConstants.VOLUNTEER_CHAT_ID, chatId, messageId);
         telegramBot.execute(forwardMessage);
     }
 
@@ -282,7 +289,7 @@ public class TelegramBotUpdateListener implements UpdatesListener {
                 return;
             }
 
-            sendMessage(telegramChatVolunteers, phone + " " + firstName + USER_ADDED_PHONE_NUMBER_TO_DB);
+            sendMessage(StringConstants.VOLUNTEER_CHAT_ID, phone + " " + firstName + USER_ADDED_PHONE_NUMBER_TO_DB);
             sendForwardMessage(finalChatId, update.message().messageId());
         }
     }
