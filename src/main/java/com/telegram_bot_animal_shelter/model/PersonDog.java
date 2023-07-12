@@ -30,11 +30,6 @@ public class PersonDog extends Person {
     @Column(name = "id")
     private Long id;
 
-    /**
-     * User choose a dog shelter
-     */
-    public boolean isChooseDog = false;
-
     public PersonDog(String name, int yearOfBirth, String phone, String address, Long chatId, Status status, Dog dog) {
         super(name, yearOfBirth, phone, address, chatId, status);
         this.dog = dog;
@@ -44,11 +39,13 @@ public class PersonDog extends Person {
         super(name, yearOfBirth, phone, address, chatId, status);
     }
 
-    public PersonDog(String name, String phone, Long chatId, boolean isChooseDog) {
+    public PersonDog(String name, String phone, Long chatId) {
         super(name, phone, chatId);
-        this.isChooseDog = isChooseDog;
     }
 
+    public PersonDog(Long chatId){
+        super(chatId);
+    }
     /**
      * Connect to entity dog, One person can have One dog
      *

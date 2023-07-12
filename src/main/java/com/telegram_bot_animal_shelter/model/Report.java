@@ -110,7 +110,7 @@ public class Report {
         this.ration = ration;
         this.health = health;
         this.habits = habits;
-        this.days = Long.valueOf(0);
+        this.days = 0L;
         this.filePath = filePath;
         this.fileSize = fileSize;
         this.data = data;
@@ -129,5 +129,10 @@ public class Report {
         this.habits = habits;
         this.days = days;
         this.caption = caption;
+    }
+
+    public Report(Long chatId){
+        this.chatId = chatId;
+        this.days = 0L;
     }
 }
