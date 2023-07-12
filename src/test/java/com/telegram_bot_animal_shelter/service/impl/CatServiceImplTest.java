@@ -1,4 +1,4 @@
-package com.telegram_bot_animal_shelter.service;
+package com.telegram_bot_animal_shelter.service.impl;
 
 import com.telegram_bot_animal_shelter.model.Cat;
 import com.telegram_bot_animal_shelter.repository.CatRepository;
