@@ -2,6 +2,7 @@ package com.telegram_bot_animal_shelter.service;
 
 import com.telegram_bot_animal_shelter.model.Dog;
 import com.telegram_bot_animal_shelter.repository.DogRepository;
+import com.telegram_bot_animal_shelter.service.impl.DogServiceImpl;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -35,7 +36,7 @@ public class DogServiceImplTest {
     @Mock
     private DogRepository dogRepositoryMock;
     @InjectMocks
-    private DogService dogService;
+    private DogServiceImpl dogService;
 
     /**
      * Testing method for getById dogs

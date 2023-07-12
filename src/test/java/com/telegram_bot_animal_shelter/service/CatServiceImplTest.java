@@ -2,6 +2,7 @@ package com.telegram_bot_animal_shelter.service;
 
 import com.telegram_bot_animal_shelter.model.Cat;
 import com.telegram_bot_animal_shelter.repository.CatRepository;
+import com.telegram_bot_animal_shelter.service.impl.CatServiceImpl;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -35,7 +36,7 @@ public class CatServiceImplTest {
     @Mock
     private CatRepository catRepositoryMock;
     @InjectMocks
-    private CatService catService;
+    private CatServiceImpl catService;
 
     /**
      * Testing method for getById cats

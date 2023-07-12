@@ -2,6 +2,7 @@ package com.telegram_bot_animal_shelter.service;
 
 import com.telegram_bot_animal_shelter.model.Report;
 import com.telegram_bot_animal_shelter.repository.ReportRepository;
+import com.telegram_bot_animal_shelter.service.impl.ReportServiceImpl;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -37,7 +38,7 @@ public class ReportServiceImplTest {
     private ReportRepository reportRepositoryMock;
 
     @InjectMocks
-    private ReportService reportService;
+    private ReportServiceImpl reportService;
 
     private final Report report = new Report(CHAT_ID, RATION, HEALTH, HABITS, DAYS, CAPTION);
 

@@ -3,6 +3,7 @@ package com.telegram_bot_animal_shelter.service;
 import com.telegram_bot_animal_shelter.model.PersonCat;
 import com.telegram_bot_animal_shelter.model.Status;
 import com.telegram_bot_animal_shelter.repository.PersonCatRepository;
+import com.telegram_bot_animal_shelter.service.impl.PersonCatServiceImpl;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -37,7 +38,7 @@ public class PersonCatServiceImplTest {
     private PersonCatRepository personCatRepositoryMock;
 
     @InjectMocks
-    private PersonCatService personCatService;
+    private PersonCatServiceImpl personCatService;
 
     private final PersonCat personCat = new PersonCat(PERSON_NAME, YEAR_OF_BIRTH, PHONE, ADDRESS, CHAT_ID, STATUS);
 
